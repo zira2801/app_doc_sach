@@ -1,0 +1,142 @@
+import 'package:app_doc_sach/color/mycolor.dart';
+import 'package:app_doc_sach/state/tab_state.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/ui_provider.dart';
+
+
+class TrangChuWidget extends StatefulWidget {
+  const TrangChuWidget({super.key});
+
+  @override
+  State<TrangChuWidget> createState() => _TrangChuWidgetState();
+}
+
+class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin{
+
+  int selectedTab = 0;
+  late TabController _tabController;
+
+  //Trang thai cua Tab
+  final _tabState = TabState();
+
+  final _selectedColor = const Color(0xFF38A938);
+  final _unselectedColor = const Color(0xff5f6368);
+  final _tabs = const [
+    Tab(text: 'Khám phá'),
+    Tab(child: Text('Nổi bật')),
+    Tab(child: Text('Mới nhất')),
+    Tab(child: Text('Danh mục')),
+  ];
+  // Function to generate tabs with dynamic text color
+  List<Tab> generateTabs(UiProvider notifier) {
+    return const [
+      Tab(
+        child: Text(
+          'Khám phá',
+        ),
+      ),
+      Tab(
+        child: Text(
+          'Nổi bật',
+        ),
+      ),
+      Tab(
+        child: Text(
+          'Mới nhất',
+        ),
+      ),
+       Tab(
+        child: Text(
+          'Danh mục',
+        ),
+      ),
+    ];
+  }
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 4, vsync: this,initialIndex: _tabState.selectedTab);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return ChangeNotifierProvider.value(
+      value: _tabState,
+      child: Scaffold(
+        body:SafeArea(
+          child: Consumer <UiProvider>(
+                    builder: (context,UiProvider notifier, child)  {
+                      return Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: double.infinity,
+                            color: notifier.isDark ? Colors.black12 : Colors.white,
+                            child:TabBar(
+                              controller: _tabController,
+                              tabs: generateTabs(notifier),
+                              labelColor: _selectedColor,
+                              indicatorColor: _selectedColor,
+                              unselectedLabelColor: notifier.isDark ? Colors.white: _unselectedColor,
+                              tabAlignment: TabAlignment.center,
+                              isScrollable: true,
+                              onTap: (index) {
+                                _tabState.setSelectedTab(index);
+                              },
+                            ),
+                          ),
+
+                          // TabBarView
+                          Expanded(
+                            child: Consumer<TabState>(
+                              builder: (context, tabState, child) {// Update the TabController index
+                                return IndexedStack(
+                                  index: _tabState.selectedTab,
+                                  children: [
+                                    // Nội dung cho mỗi Tab
+                                    _buildTabContent('Nội dung của tab Khám phá'),
+                                    _buildTabContent('Nội dung của tab Nổi bật'),
+                                    _buildTabContent('Nội dung của tab Mới nhất'),
+                                    _buildTabContent('Nội dung của tab Danh mục'),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ]
+                      );
+                    }
+                  ),
+            ),
+        ),
+    );
+  }
+
+  Widget _buildTabContent(String content) {
+    return Center(
+      child: Text(
+        content,
+        style: TextStyle(fontSize: 20),
+      ),
+    );
+  }
+
+}
