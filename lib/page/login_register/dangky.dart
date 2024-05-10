@@ -183,6 +183,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
     // Kiểm tra trường nhập liệu không được trống
     if (emailController.text.isEmpty || passwordController.text.isEmpty || repasswordController.text.isEmpty) {
       _errorNullMessage(context);
+      return;
     }
     // Kiểm tra email có hợp lệ không
     if (!_isEmailValid(emailController.text)) {
@@ -398,7 +399,7 @@ _errorEmailMessage(BuildContext context){
       SnackBar(
         content: Container(
           padding: const EdgeInsets.all(8),
-          height: 80,
+          height: 90,
           decoration: const BoxDecoration(
               color: Color.fromARGB(255, 179, 89, 89),
               borderRadius: BorderRadius.all(Radius.circular(10))
