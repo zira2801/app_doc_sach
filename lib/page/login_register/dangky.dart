@@ -125,7 +125,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
                   icon: const Icon(Icons.email_outlined),
                   suffixIcon: _hasEmailText
                       ? IconButton(
-                    icon: const Icon(Icons.clear),
+                    icon: Icon(Icons.clear,color: Colors.grey.shade700),
                     onPressed: clearEmail,
                   )
                       : null,
@@ -141,7 +141,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
                   icon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      obscurePassword ? Icons.visibility_off : Icons.visibility,color: Colors.grey.shade700,
                     ),
                     onPressed: togglePasswordVisibility, // Gọi hàm togglePasswordVisibility khi nhấn vào IconButton
                   ),
@@ -157,7 +157,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
                   icon: const Icon(Icons.lock_reset),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      obscureRePassword ? Icons.visibility_off : Icons.visibility,
+                      obscureRePassword ? Icons.visibility_off : Icons.visibility,color: Colors.grey.shade700
                     ),
                     onPressed: toggleRePasswordVisibility, // Gọi hàm togglePasswordVisibility khi nhấn vào IconButton
                   ),
@@ -200,13 +200,22 @@ class _DangKyWidgetState extends State<DangKyWidget> {
 // Kiểm tra mật khẩu nhập lại có trùng khớp không
     if (passwordController.text != repasswordController.text) {
       _errorRePassMessage(context);
+      return;
     }
-
 
     // Hiển thị tiện ích loading
     progressDialog.show();
 
     try {
+      // Kiểm tra xem người dùng đã tồn tại trong cơ sở dữ liệu chưa
+      bool userExists = await checkIfUserExists(emailController.text);
+      if (userExists) {
+        // Đóng tiện ích loading
+        progressDialog.hide();
+        _errorAccountExistMessage(context);
+        return;
+      }
+
       // Thực hiện đăng ký người dùng
       await _signup();
       // Đăng ký thành công, thêm thông tin người dùng vào Firebase Realtime Database
@@ -225,6 +234,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
           gioiTinh: '',
           diaChi:'',
           ngaySinh: '',
+          anhDocGia: '',
           role: ''
       );
       // Lưu thông tin người dùng vào Firebase Realtime Database
@@ -287,6 +297,15 @@ class _DangKyWidgetState extends State<DangKyWidget> {
     }
   }
 
+  Future<bool> checkIfUserExists(String email) async {
+    // Thực hiện truy vấn cơ sở dữ liệu Firebase
+    DatabaseReference ref = FirebaseDatabase.instance.reference().child("TaiKhoan");
+    DataSnapshot snapshot = await ref.orderByChild("email").equalTo(email).once().then((snapshot) => snapshot.snapshot);
+
+    // Kiểm tra xem có bất kỳ kết quả nào từ truy vấn hay không
+    return snapshot.value != null;
+  }
+
   bool _isEmailValid(String email) {
     // Biểu thức chính quy để kiểm tra email
     final RegExp emailRegex = RegExp(
@@ -304,7 +323,17 @@ class _DangKyWidgetState extends State<DangKyWidget> {
       caseSensitive: false,
       multiLine: false,
     );
-    return passwordRegex.hasMatch(password);
+    return passwordRegex.hasMatch(password) && containsUpperCase(password);
+  }
+
+  bool containsUpperCase(String password) {
+    // Kiểm tra xem mật khẩu có chứa ký tự in hoa không
+    for (var char in password.split('')) {
+      if (char == char.toUpperCase() && char != char.toLowerCase()) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -503,6 +532,51 @@ _errorRePassMessage(BuildContext context){
 
                   Spacer(),
                   Text('Mật khẩu nhập lại không trùng khớp. Vui lòng nhập lại.',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,)
+                ],
+              ))
+            ],
+          ),
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      )
+  );
+
+}
+
+// Thông báo tài khoản ton tai trong he thong
+_errorAccountExistMessage(BuildContext context) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Container(
+          padding: const EdgeInsets.all(8),
+          height: 90,
+          decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 179, 89, 89),
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          child: const Row(
+            children: [
+              Icon(Icons.error_outline, color: Colors.white, size: 40,),
+
+              SizedBox(width: 15,),
+
+              Expanded(child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Opps. An Error Occured",
+                    style: TextStyle(fontSize: 15, color: Colors.white),),
+
+                  Spacer(),
+                  Text(
+                    'Tài khoản đã tồn tại trong hệ thông, Không thể tạo tài khoản!.',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10,

@@ -26,10 +26,13 @@ class AuthService {
         password: password,
       );
       return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      log("Firebase Auth Exception: ${e.code}");
+      // Ném ra ngoại lệ để bắt lỗi ở nơi gọi
+      throw FirebaseAuthException(code: e.code, message: e.message);
     } catch (e) {
       log("Error occurred: $e");
-      // Ném ra ngoại lệ để bắt lỗi ở nơi gọi
-      throw e;
+      rethrow;
     }
   }
 

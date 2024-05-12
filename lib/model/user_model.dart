@@ -11,7 +11,9 @@ class User {
   final String gioiTinh;
   final String diaChi;
   final String ngaySinh;
+  final String anhDocGia;
   final String role;
+
 
   User({
     required this.id,
@@ -24,7 +26,9 @@ class User {
     required this.gioiTinh,
     required this.diaChi,
     required this.ngaySinh,
+    required this.anhDocGia,
     required this.role
+
   });
 
   // Convert User object to a Map
@@ -40,6 +44,7 @@ class User {
       'gioiTinh': gioiTinh,
       'diaChi': diaChi,
       'ngaySinh': ngaySinh,
+      'anhDocGia': anhDocGia ,
       'role': role
     };
   }

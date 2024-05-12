@@ -16,13 +16,14 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
   if(kIsWeb){
-    Firebase.initializeApp(options: const FirebaseOptions(apiKey: "AIzaSyA4kf3WYLv6NKE7GIiGqBUVVilKMXVmntw",
+   await Firebase.initializeApp(options: const FirebaseOptions(apiKey: "AIzaSyBnFNsGdqWj__OIIbRZUSjRQvyQMO0krd0",
         authDomain: "appdocsach-77e59.firebaseapp.com",
         projectId: "appdocsach-77e59",
         storageBucket: "appdocsach-77e59.appspot.com",
         messagingSenderId: "119520931791",
-        appId: "1:119520931791:web:8ef3e0fb27b03c91c9ecba",
+        appId: "1:119520931791:android:c38a905e1d751c99c9ecba",
         measurementId: "G-WPMB69QYKQ"));
+    FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";
 
   }
   else {
@@ -32,8 +33,9 @@ void main() async{
       appId: "1:119520931791:android:c38a905e1d751c99c9ecba",
       messagingSenderId: "119520931791",
       projectId: "appdocsach-77e59",),
+
   );
- /* FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";*/
+   FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";
   }
 
  /* final Future<FirebaseApp> _fApp = Firebase.initializeApp();*/

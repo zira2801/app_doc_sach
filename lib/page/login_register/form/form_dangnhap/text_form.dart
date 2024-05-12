@@ -75,7 +75,7 @@ class _TextFormGlobalState extends State<TextFormGlobal> {
                     suffix: widget.suffix,
                     suffixIcon: widget.suffixIcon
                   ),
-                  style: const TextStyle(fontSize: 13),
+                  style: const TextStyle(fontSize: 13,color: Colors.black),
                 ),
               ],
             ),
