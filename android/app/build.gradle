@@ -50,6 +50,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -70,4 +71,5 @@ apply plugin: 'com.google.gms.google-services' // Đảm bảo bạn có dòng n
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.8.1')
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

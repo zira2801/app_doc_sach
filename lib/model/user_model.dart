@@ -4,6 +4,7 @@ class User {
   final String id;
   final String email;
   final String password; // Note: It's not recommended to store passwords in plain text, consider using Firebase Authentication instead
+  final String displayName;
   final String ho;
   final String tenLot;
   final String ten;
@@ -11,14 +12,16 @@ class User {
   final String gioiTinh;
   final String diaChi;
   final String ngaySinh;
-  final String anhDocGia;
+  final String avatar;
   final String role;
+  final String loaitaikhoan;
 
 
   User({
     required this.id,
     required this.email,
     required this.password,
+    required this.displayName,
     required this.ho,
     required this.tenLot,
     required this.ten,
@@ -26,9 +29,9 @@ class User {
     required this.gioiTinh,
     required this.diaChi,
     required this.ngaySinh,
-    required this.anhDocGia,
-    required this.role
-
+    required this.avatar,
+    required this.role,
+    required this.loaitaikhoan
   });
 
   // Convert User object to a Map
@@ -37,6 +40,7 @@ class User {
       'id': id,
       'email': email,
       'password': password,
+      'displayName': displayName,
       'ho': ho,
       'tenLot': tenLot,
       'ten': ten,
@@ -44,8 +48,9 @@ class User {
       'gioiTinh': gioiTinh,
       'diaChi': diaChi,
       'ngaySinh': ngaySinh,
-      'anhDocGia': anhDocGia ,
-      'role': role
+      'anhDocGia': avatar ,
+      'role': role,
+      'loaidangnhap': loaitaikhoan
     };
   }
 }

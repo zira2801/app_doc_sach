@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:app_doc_sach/page/login_register/dangnhap.dart';
+import 'package:app_doc_sach/page/login_register/service/auth_service.dart';
 import 'package:app_doc_sach/page/taikhoanwidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../color/mycolor.dart';
 import '../../provider/ui_provider.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 class ChonDangNhapWidget extends StatefulWidget {
   const ChonDangNhapWidget({super.key});
 
@@ -18,6 +21,7 @@ class ChonDangNhapWidget extends StatefulWidget {
 
 class _ChonDangNhapWidgetState extends State<ChonDangNhapWidget> {
 
+  final AuthService _auth = AuthService();
   void  _getStatusBarStyle(UiProvider uiProvider) {
     if (uiProvider.isDark) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
@@ -86,7 +90,7 @@ class _ChonDangNhapWidgetState extends State<ChonDangNhapWidget> {
 
                 ElevatedButton(
                   onPressed: () {
-                    // Hành động khi nút được nhấn
+                    _loginGoogle();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent, // Đặt màu nền là trong suốt
@@ -275,5 +279,16 @@ class _ChonDangNhapWidgetState extends State<ChonDangNhapWidget> {
         ),
       ),
     );
+  }
+
+  _loginGoogle() async {
+    try{
+      await _auth.signInWithGoogle();
+    }
+    catch(e) {
+      log("Error occurred: $e");
+      // Ném ra ngoại lệ để bắt lỗi ở nơi gọi
+      throw e;
+    }
   }
 }

@@ -227,6 +227,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
           id: newUserId,
           email: emailController.text,
           password: passwordController.text,
+          displayName: '',
           ho: '',
           tenLot: '',
           ten: '',
@@ -234,8 +235,9 @@ class _DangKyWidgetState extends State<DangKyWidget> {
           gioiTinh: '',
           diaChi:'',
           ngaySinh: '',
-          anhDocGia: '',
-          role: ''
+          avatar: '',
+          role: '',
+          loaitaikhoan: 'email'
       );
       // Lưu thông tin người dùng vào Firebase Realtime Database
       await newUserRef.set(user.toJson()); // Lưu thông tin người dùng vào cơ sở dữ liệu
@@ -250,24 +252,30 @@ class _DangKyWidgetState extends State<DangKyWidget> {
       await Future.delayed(const Duration(seconds: 2));
       // Ẩn thông báo thành công
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      final user1 = await _auth.loginUserWithEmailAndPassword(emailController.text.trim(), passwordController.text.trim());
+      if(user1 != null){
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 500), // Độ dài của animation
+            pageBuilder: (context, animation, secondaryAnimation) => const DashBoardScreen(), // Builder cho trang chủ
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0); // Bắt đầu từ ngoài phải
+              const end = Offset.zero; // Kết thúc ở vị trí ban đầu
+              const curve = Curves.ease; // Kiểu animation
+              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve)); // Tạo tween
+              var offsetAnimation = animation.drive(tween); // Áp dụng tween vào animation
+              return SlideTransition(
+                position: offsetAnimation, // Sử dụng SlideTransition với animation đã thiết lập
+                child: child,
+              );
+            },
+          ),
+        );
+      }
+      else{
+        print('Error during sign up');
+      }
 
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 500), // Độ dài của animation
-          pageBuilder: (context, animation, secondaryAnimation) => const DashBoardScreen(), // Builder cho trang chủ
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // Bắt đầu từ ngoài phải
-            const end = Offset.zero; // Kết thúc ở vị trí ban đầu
-            const curve = Curves.ease; // Kiểu animation
-            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve)); // Tạo tween
-            var offsetAnimation = animation.drive(tween); // Áp dụng tween vào animation
-            return SlideTransition(
-              position: offsetAnimation, // Sử dụng SlideTransition với animation đã thiết lập
-              child: child,
-            );
-          },
-        ),
-      );
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Error during sign up: $e');
