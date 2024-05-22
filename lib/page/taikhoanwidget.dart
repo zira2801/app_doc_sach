@@ -1,4 +1,6 @@
 import 'package:app_doc_sach/color/mycolor.dart';
+import 'package:app_doc_sach/page/login_register/button/DangNhapDangKyWidget.dart';
+import 'package:app_doc_sach/page/login_register/button/DangXuatWidget.dart';
 import 'package:app_doc_sach/page/login_register/chon_dangnhap.dart';
 import 'package:app_doc_sach/provider/ui_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +11,8 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
+import 'login_register/service/auth_service.dart';
+
 class TaiKhoanWidget extends StatefulWidget {
   const TaiKhoanWidget({super.key});
 
@@ -17,13 +21,7 @@ class TaiKhoanWidget extends StatefulWidget {
 }
 
 class _TaiKhoanWidgetState extends State<TaiKhoanWidget> {
-
-  void  _getStatusBarStyle() {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: Colors.transparent,)
-      );
-  }
-
+  final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,68 +57,16 @@ class _TaiKhoanWidgetState extends State<TaiKhoanWidget> {
                                 ),
                               ),
                              const SizedBox(height: 15,),
+                              StreamBuilder(stream:_authService.authStateChanges ,
+                                  builder: (context, snapshot) {
+                                    if(snapshot.hasData){
+                                      return DangXuatWidget(authService: _authService,);
+                                    }
+                                    else{
+                                      return const DangNhapDangKyWidget();
+                                    }
+                                  }),
 
-                              Material(
-                                color: Colors.amber.shade800,
-                                borderRadius: BorderRadius.circular(8), // Đặt borderRadius cho Material
-                                child: InkWell(
-                                  onTap: () => {
-                                    _getStatusBarStyle(),
-                                    Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        transitionDuration: const Duration(milliseconds: 300),
-                                        transitionsBuilder: (
-                                            BuildContext context,
-                                            Animation<double> animation,
-                                            Animation<double> secondaryAnimation,
-                                            Widget child,
-                                            ) {
-                                          return SlideTransition(
-                                            position: Tween<Offset>(
-                                              begin: const Offset(1.0, 0.0), // Bắt đầu từ bên phải
-                                              end: Offset.zero, // Kết thúc tại vị trí ban đầu
-                                            ).animate(animation),
-                                            child: child,
-                                          );
-                                        },
-                                        pageBuilder: (
-                                            BuildContext context,
-                                            Animation<double> animation,
-                                            Animation<double> secondaryAnimation,
-                                            ) {
-                                          return ChonDangNhapWidget();
-                                        },
-                                      ),
-                                    ),
-
-                                  },
-                                  borderRadius: BorderRadius.circular(8), // Đặt borderRadius cho InkWell
-                                  child: Container(
-                                    height: 35,
-                                    width: 190,
-                                    margin: const EdgeInsets.only(top: 5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.amber.shade800.withOpacity(0.5),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 5),
-                                        child: Text(
-                                          'Đăng nhập / Đăng ký',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 13,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
                             ],
                           ),
                         ),
@@ -128,6 +74,7 @@ class _TaiKhoanWidgetState extends State<TaiKhoanWidget> {
                       ),
 
                        const SizedBox(height: 20,),
+                      
 
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),

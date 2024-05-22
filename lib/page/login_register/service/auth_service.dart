@@ -83,12 +83,22 @@ class AuthService {
 
   Future<void> signOut() async {
     try {
+      User? currentUser = _auth.currentUser;
+      if (currentUser != null) {
+        for (var userInfo in currentUser.providerData) {
+          if (userInfo.providerId == 'google.com') {
+            await GoogleSignIn().signOut();
+          }
+        }
+      }
       await _auth.signOut();
-      await GoogleSignIn().signOut();
     } catch (e) {
       log("Error occurred: $e");
       // Ném ra ngoại lệ để bắt lỗi ở nơi gọi
       throw e;
     }
   }
+
+  // Lấy trạng thái đăng nhập
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 }

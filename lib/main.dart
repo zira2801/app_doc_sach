@@ -42,7 +42,7 @@ void main() async{
   /*FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";*/
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => TabState())
+      ChangeNotifierProvider(create: (context) => TabState())
     ],
     child: const MyApp(),
   ));

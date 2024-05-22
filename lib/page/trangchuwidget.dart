@@ -1,4 +1,8 @@
 import 'package:app_doc_sach/color/mycolor.dart';
+import 'package:app_doc_sach/page/page_tab/danhmuc.dart';
+import 'package:app_doc_sach/page/page_tab/khampha.dart';
+import 'package:app_doc_sach/page/page_tab/moinhat.dart';
+import 'package:app_doc_sach/page/page_tab/noibat.dart';
 import 'package:app_doc_sach/state/tab_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -112,10 +116,10 @@ class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProvid
                                   index: _tabState.selectedTab,
                                   children: [
                                     // Nội dung cho mỗi Tab
-                                    _buildTabContent('Nội dung của tab Khám phá'),
-                                    _buildTabContent('Nội dung của tab Nổi bật'),
-                                    _buildTabContent('Nội dung của tab Mới nhất'),
-                                    _buildTabContent('Nội dung của tab Danh mục'),
+                                    _buildTabContent(const KhamPhaWidget()),
+                                    _buildTabContent(const NoiBatWidget()),
+                                    _buildTabContent(const MoiNhatWidget()),
+                                    _buildTabContent(const DanhMucWidget()),
                                   ],
                                 );
                               },
@@ -130,12 +134,9 @@ class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProvid
     );
   }
 
-  Widget _buildTabContent(String content) {
+  Widget _buildTabContent(Widget widget) {
     return Center(
-      child: Text(
-        content,
-        style: TextStyle(fontSize: 20),
-      ),
+      child: widget
     );
   }
 
