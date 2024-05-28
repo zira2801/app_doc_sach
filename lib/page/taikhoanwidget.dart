@@ -30,7 +30,7 @@ class _TaiKhoanWidgetState extends State<TaiKhoanWidget> {
           return SafeArea(
             child: Container(
               width: double.infinity,
-              color: notifier.isDark ? Colors.black26 : Colors.green.shade50,
+              color: notifier.isDark ? Colors.black.withOpacity(0.1) : Colors.green.shade50,
               child: SingleChildScrollView(
                 child: Column(
                     children: [
