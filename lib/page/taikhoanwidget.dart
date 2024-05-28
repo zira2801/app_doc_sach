@@ -1,7 +1,7 @@
 import 'package:app_doc_sach/color/mycolor.dart';
 import 'package:app_doc_sach/page/login_register/button/DangNhapDangKyWidget.dart';
 import 'package:app_doc_sach/page/login_register/button/DangXuatWidget.dart';
-import 'package:app_doc_sach/page/login_register/chon_dangnhap.dart';
+
 import 'package:app_doc_sach/provider/ui_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
