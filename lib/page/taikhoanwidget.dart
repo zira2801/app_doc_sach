@@ -7,8 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import 'login_register/service/auth_service.dart';
