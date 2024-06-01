@@ -1,7 +1,11 @@
 
 import 'package:app_doc_sach/color/mycolor.dart';
+import 'package:app_doc_sach/controller/controller.dart';
+import 'package:app_doc_sach/model/user_model.dart';
 import 'package:app_doc_sach/page/slash_screen/slash_screen.dart';
 import 'package:app_doc_sach/provider/ui_provider.dart';
+import 'package:app_doc_sach/route/app_page.dart';
+import 'package:app_doc_sach/route/app_route.dart';
 import 'package:app_doc_sach/state/tab_state.dart';
 import 'package:app_doc_sach/view/dashboard/dashboard_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,8 +13,15 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'provider/tab_provider.dart';
+import 'service/local_service/local_auth_service.dart';
+import 'view/dashboard/dashboard_binding.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,12 +51,32 @@ void main() async{
 
  /* final Future<FirebaseApp> _fApp = Firebase.initializeApp();*/
   /*FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";*/
+  await Hive.initFlutter();
+  Hive.registerAdapter(UsersAdapter());
+
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => TabState())
     ],
     child: const MyApp(),
   ));
+  configLoading();
+}
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.white
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.white
+    ..textColor = Colors.white
+    ..maskType = EasyLoadingMaskType.black
+    ..userInteractions = false
+    ..dismissOnTap = true;
 }
 
 class MyApp extends StatelessWidget {
@@ -70,18 +101,32 @@ class MyApp extends StatelessWidget {
                 statusBarBrightness: Brightness.dark,
               );
             }
-            return  MaterialApp(
+            return  GetMaterialApp(
               debugShowCheckedModeBanner: false,
               home: const SlashScreen(),
+              initialRoute: AppRoute.dashboard,
+              initialBinding: DashboardBinding(),
+              getPages: /*[
+                GetPage(
+                  name: '/',
+                  page: () => const DashBoardScreen(),
+                  binding: DashboardBinding(),
+                ),
+                // Other routes
+              ]*/ AppPage.list,
               themeMode: notifier.isDark ? ThemeMode.dark : ThemeMode.light,
               darkTheme: notifier.isDark ? notifier.darkTheme : notifier.lightTheme,
               theme: ThemeData(
                   colorScheme: ColorScheme.fromSeed(seedColor: MyColor.primaryColor),
                   useMaterial3: true
               ),
+              builder: EasyLoading.init(),
             );
           }
       ),
     );
   }
+
+
+
 }

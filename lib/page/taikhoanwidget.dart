@@ -6,8 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controller/auth_controller.dart';
+import '../controller/controller.dart';
 import 'login_register/service/auth_service.dart';
 
 class TaiKhoanWidget extends StatefulWidget {
@@ -18,7 +22,11 @@ class TaiKhoanWidget extends StatefulWidget {
 }
 
 class _TaiKhoanWidgetState extends State<TaiKhoanWidget> {
-  final AuthService _authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,48 +39,43 @@ class _TaiKhoanWidgetState extends State<TaiKhoanWidget> {
               child: SingleChildScrollView(
                 child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
-                        child: Container(
-                        height: 168,
-                        width: double.infinity,
-                        /*color: Colors.green.shade50,*/
-                        decoration: BoxDecoration(
-                          color: notifier.isDark ? Colors.black38 : Colors.white,
-                          borderRadius: BorderRadius.circular(5)
-                        ),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 90,
-                                width: 90,
-                                margin: const EdgeInsets.only(top: 15),
-                                child: const CircleAvatar(
-                                backgroundImage: AssetImage('assets/icon/logoapp.png'),
-                                  radius: 55,
+                       Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+                          child: Container(
+                          height: 168,
+                          width: double.infinity,
+                          /*color: Colors.green.shade50,*/
+                          decoration: BoxDecoration(
+                            color: notifier.isDark ? Colors.black38 : Colors.white,
+                            borderRadius: BorderRadius.circular(5)
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 90,
+                                  width: 90,
+                                  margin: const EdgeInsets.only(top: 15),
+                                  child: const CircleAvatar(
+                                  backgroundImage: AssetImage('assets/icon/logoapp.png'),
+                                    radius: 55,
+                                  ),
                                 ),
-                              ),
-                             const SizedBox(height: 15,),
-                              StreamBuilder(stream:_authService.authStateChanges ,
-                                  builder: (context, snapshot) {
-                                    if(snapshot.hasData){
-                                      return DangXuatWidget(authService: _authService,);
-                                    }
-                                    else{
-                                      return const DangNhapDangKyWidget();
-                                    }
-                                  }),
-
-                            ],
+                               const SizedBox(height: 15,),
+                                Obx(
+                                      () {
+                                    return authController.user.value != null
+                                        ? const DangXuatWidget()
+                                        : const DangNhapDangKyWidget();
+                                  },
+                                ),
+                                /*token != null? const DangXuatWidget() : const DangNhapDangKyWidget()*/
+                              ],
+                            ),
+                          ),
                           ),
                         ),
-                        ),
-                      ),
-
                        const SizedBox(height: 20,),
-                      
-
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
 

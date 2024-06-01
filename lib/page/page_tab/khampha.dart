@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:app_doc_sach/provider/ui_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/product_phobien.dart';
 
@@ -88,9 +91,13 @@ class _KhamPhaWidgetState extends State<KhamPhaWidget> {
                   ),
                 ),
                 const SizedBox(height: 10,),
-                slide()
-                          ],
-                        ),
+                slide(),
+                const SizedBox(height: 10,),
+                Text("Gợi ý cho bạn"),
+                const SizedBox(height: 5,),
+                 gridview_goiy(),
+              ],
+              ),
             ],
           ),
         ),
@@ -129,7 +136,7 @@ List<ProductPhobien> listProduct = [
 ];
 Widget slide() {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+    padding: const EdgeInsets.only(bottom: 15, left: 10, right: 10),
     child: Container(
       height: 180,
       decoration: BoxDecoration(
@@ -183,31 +190,35 @@ Widget slide() {
                         ),
                         Expanded(
                           flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 20, left: 20, right: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.tenSach,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          child: Consumer <UiProvider>(
+                            builder: (context,UiProvider notifier, child) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 20, left: 20, right: 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product.tenSach,
+                                      style: TextStyle(
+                                        color: notifier.isDark ? Colors.white : Colors.black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      'Thể loại: ${product.theLoai}',
+                                      style: TextStyle(
+                                        color: notifier.isDark ? Colors.white : Colors.black,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 10),
-                                Text(
-                                  'Thể loại: ${product.theLoai}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -223,3 +234,88 @@ Widget slide() {
   );
 }
 
+Widget gridview_goiy() {
+  return Container(
+    height: 300, // Chiều cao cố định để tránh overflow
+    child: GridView.builder(
+      scrollDirection: Axis.horizontal,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // Số dòng
+        childAspectRatio: 0.75, // Tỉ lệ chiều rộng/chiều cao của mỗi item
+      ),
+      itemCount: listProduct.length, // Số lượng item
+      itemBuilder: (context, index) {
+        final product = listProduct[index];
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        product.image,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 120,
+                      ),
+                    ),
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          product.theLoai,
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product.tenSach,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        product.theLoai,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ),
+  );
+}

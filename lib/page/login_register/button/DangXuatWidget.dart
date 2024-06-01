@@ -1,13 +1,18 @@
+import 'package:app_doc_sach/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../service/auth_service.dart';
 
-class DangXuatWidget extends StatelessWidget {
-  final AuthService authService;
-  const DangXuatWidget({super.key, required this.authService});
+class DangXuatWidget extends StatefulWidget {
+  const DangXuatWidget({super.key});
 
+  @override
+  State<DangXuatWidget> createState() => _DangXuatWidgetState();
+}
+
+class _DangXuatWidgetState extends State<DangXuatWidget> {
     Future<void> _restartApp() async {
     // Đợi 2 giây trước khi khởi động lại ứng dụng
     await Future.delayed(const Duration(seconds: 2));
@@ -22,8 +27,8 @@ class DangXuatWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(8), // Đặt borderRadius cho Material
       child: InkWell(
         onTap: () async{
-          await authService.signOut();
-          _restartApp();
+         authController.signOut();
+          setState(() {});
           Restart.restartApp();// Gọi hàm restart ứng dụng sau khi đăng xuất
         },
         borderRadius: BorderRadius.circular(8), // Đặt borderRadius cho InkWell
