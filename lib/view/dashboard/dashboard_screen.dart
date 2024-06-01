@@ -9,11 +9,13 @@ import 'package:app_doc_sach/state/tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../provider/ui_provider.dart';
+import '../../service/local_service/local_auth_service.dart';
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({super.key});
 
@@ -24,6 +26,7 @@ class DashBoardScreen extends StatefulWidget {
 class _DashBoardScreenState extends State<DashBoardScreen> {
   late TabState _tabState;
   int _selectedIndex = 0;
+  final LocalAuthService _localAuthService = LocalAuthService();
   static const List<Widget> _widgetOption = <Widget>[
     TrangChuWidget(),
     KeSachWidget(),
@@ -37,10 +40,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       _selectedIndex = index;
     });
   }
-
   @override
   void initState() {
     // TODO: implement initState
+    _localAuthService.init();
     super.initState();
     /*
     var tabProvider = Provider.of<TabProvider>(context, listen: false);
@@ -50,7 +53,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         _selectedIndex = tabProvider.selectedIndex;
       });
     });*/
-
     _tabState = Provider.of<TabState>(context, listen: false);
   }
 
