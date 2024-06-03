@@ -16,23 +16,22 @@ class User {
   final String role;
   final String loaitaikhoan;
 
-
-  User({
-    required this.id,
-    required this.email,
-    required this.password,
-    required this.displayName,
-    required this.ho,
-    required this.tenLot,
-    required this.ten,
-    required this.soDienThoai,
-    required this.gioiTinh,
-    required this.diaChi,
-    required this.ngaySinh,
-    required this.avatar,
-    required this.role,
-    required this.loaitaikhoan
-  });
+//hàm khởi tạo
+  User(
+      {required this.id,
+      required this.email,
+      required this.password,
+      required this.displayName,
+      required this.ho,
+      required this.tenLot,
+      required this.ten,
+      required this.soDienThoai,
+      required this.gioiTinh,
+      required this.diaChi,
+      required this.ngaySinh,
+      required this.avatar,
+      required this.role,
+      required this.loaitaikhoan});
 
   // Convert User object to a Map
   Map<String, dynamic> toJson() {
@@ -48,7 +47,7 @@ class User {
       'gioiTinh': gioiTinh,
       'diaChi': diaChi,
       'ngaySinh': ngaySinh,
-      'anhDocGia': avatar ,
+      'anhDocGia': avatar,
       'role': role,
       'loaidangnhap': loaitaikhoan
     };

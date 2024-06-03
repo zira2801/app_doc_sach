@@ -1,9 +1,12 @@
 
 import 'package:app_doc_sach/color/mycolor.dart';
+import 'package:app_doc_sach/page/login_register/dangnhap.dart';
+import 'package:app_doc_sach/page/page_admin/dashboard_admin.dart';
 import 'package:app_doc_sach/page/slash_screen/slash_screen.dart';
 import 'package:app_doc_sach/provider/ui_provider.dart';
 import 'package:app_doc_sach/state/tab_state.dart';
 import 'package:app_doc_sach/view/dashboard/dashboard_screen.dart';
+import 'package:app_doc_sach/widgets/dashboard_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
@@ -38,7 +41,7 @@ void main() async{
    FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";
   }
 
- /* final Future<FirebaseApp> _fApp = Firebase.initializeApp();*/
+ /* final Future<FirebaseApp> _fApp = Firebase.initializeApp(); */
   /*FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";*/
   runApp(MultiProvider(
     providers: [
@@ -72,7 +75,7 @@ class MyApp extends StatelessWidget {
             }
             return  MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: const SlashScreen(),
+              home: const DangNhapWidget(),
               themeMode: notifier.isDark ? ThemeMode.dark : ThemeMode.light,
               darkTheme: notifier.isDark ? notifier.darkTheme : notifier.lightTheme,
               theme: ThemeData(

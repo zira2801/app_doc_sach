@@ -5,6 +5,8 @@ import 'package:app_doc_sach/page/login_register/button/button_global.dart';
 import 'package:app_doc_sach/page/login_register/dangky.dart';
 import 'package:app_doc_sach/page/login_register/form/form_dangnhap/text_form.dart';
 import 'package:app_doc_sach/page/login_register/service/auth_service.dart';
+import 'package:app_doc_sach/page/page_admin/dashboard_admin.dart';
+import 'package:app_doc_sach/widgets/dashboard_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,10 +33,11 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
   // Khởi tạo một đối tượng ProgressDialog
   late ProgressDialog progressDialog;
 
+//thay đổi kiểu dáng của thanh trạng thái để phù hợp với giao diện của ứng dụng
   void _getStatusBarStyle() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.transparent,)
-    );
+      statusBarColor: Colors.transparent,
+    ));
   }
 
   bool _hasEmailText = false;
@@ -61,7 +64,7 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
   void togglePasswordVisibility() {
     setState(() {
       obscurePassword =
-      !obscurePassword; // Thay đổi trạng thái hiển thị/ẩn mật khẩu
+          !obscurePassword; // Thay đổi trạng thái hiển thị/ẩn mật khẩu
     });
   }
 
@@ -90,12 +93,13 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    //WillPopScope là một widget trong Flutter cho phép bạn can thiệp và
+    ///xử lý sự kiện khi người dùng nhấn nút "back" (trở về) trên thiết bị.
     return WillPopScope(
       onWillPop: () async {
         Future.delayed(const Duration(milliseconds: 300), () {
           _getStatusBarStyle();
         });
-
 
         // Trả về true để cho phép pop màn hình
         return true;
@@ -119,8 +123,11 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
 
                         Navigator.pop(context);
                       },
-                      child: const Icon(Icons.arrow_back_sharp, size: 30,
-                        color: Colors.black,)),
+                      child: const Icon(
+                        Icons.arrow_back_sharp,
+                        size: 30,
+                        color: Colors.black,
+                      )),
                   Container(
                     alignment: Alignment.center,
                     child: Container(
@@ -131,7 +138,9 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                     ),
                   ),
 
-                  const SizedBox(height: 50,),
+                  const SizedBox(
+                    height: 50,
+                  ),
                   const Text(
                     'Đăng nhập',
                     style: TextStyle(
@@ -141,7 +150,9 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                     ),
                   ),
 
-                  const SizedBox(height: 15,),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   // Email Input
                   TextFormGlobal(
                     controller: emailController,
@@ -151,13 +162,16 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                     icon: const Icon(Icons.email_outlined),
                     suffixIcon: _hasEmailText
                         ? IconButton(
-                      icon: Icon(Icons.clear, color: Colors.grey.shade700),
-                      onPressed: clearEmail,
-                    )
+                            icon:
+                                Icon(Icons.clear, color: Colors.grey.shade700),
+                            onPressed: clearEmail,
+                          )
                         : null,
                   ),
 
-                  const SizedBox(height: 15,),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   // Password Input
                   TextFormGlobal(
                     controller: passwordController,
@@ -167,14 +181,19 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                     icon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        obscurePassword ? Icons.visibility_off : Icons
-                            .visibility, color: Colors.grey.shade700,
+                        obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey.shade700,
                       ),
-                      onPressed: togglePasswordVisibility, // Gọi hàm togglePasswordVisibility khi nhấn vào IconButton
+                      onPressed:
+                          togglePasswordVisibility, // Gọi hàm togglePasswordVisibility khi nhấn vào IconButton
                     ),
                   ),
 
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Row(
@@ -196,11 +215,18 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 30,),
-                  ButtonGlobal(text: 'Đăng nhập', onPressed: () {
-                    _login();
-                  },),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  ButtonGlobal(
+                    text: 'Đăng nhập',
+                    onPressed: () {
+                      _login();
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
 
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -215,18 +241,22 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                             'Bạn chưa có tài khoản?',
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
-                          const SizedBox(width: 5,),
+                          const SizedBox(
+                            width: 5,
+                          ),
                           InkWell(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                  transitionDuration: const Duration(
-                                      milliseconds: 300),
-                                  transitionsBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation,
-                                      Widget child,) {
+                                  transitionDuration:
+                                      const Duration(milliseconds: 300),
+                                  transitionsBuilder: (
+                                    BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child,
+                                  ) {
                                     return SlideTransition(
                                       position: Tween<Offset>(
                                         begin: const Offset(1.0, 0.0),
@@ -237,9 +267,11 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                                       child: child,
                                     );
                                   },
-                                  pageBuilder: (BuildContext context,
-                                      Animation<double> animation,
-                                      Animation<double> secondaryAnimation,) {
+                                  pageBuilder: (
+                                    BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                  ) {
                                     return const DangKyWidget();
                                   },
                                 ),
@@ -248,9 +280,7 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
                             child: const Text(
                               'Đăng ký',
                               style: TextStyle(
-                                  color: MyColor.primaryColor, fontSize: 13
-
-                              ),
+                                  color: MyColor.primaryColor, fontSize: 13),
                             ),
                           ),
                         ],
@@ -266,177 +296,196 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
     );
   }
 
-
   _succesMessage(BuildContext context) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Container(
-            padding: const EdgeInsets.all(8),
-            height: 80,
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 81, 146, 83),
-                borderRadius: BorderRadius.all(Radius.circular(10))
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Container(
+        padding: const EdgeInsets.all(8),
+        height: 80,
+        decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 81, 146, 83),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: const Row(
+          children: [
+            Icon(
+              Icons.check_circle,
+              color: Colors.white,
+              size: 40,
             ),
-            child: const Row(
+            SizedBox(
+              width: 15,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.check_circle, color: Colors.white, size: 40,),
-
-                SizedBox(width: 15,),
-
-                Expanded(child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Succes",
-                      style: TextStyle(fontSize: 15, color: Colors.white),),
-
-                    Spacer(),
-                    Text('Đăng nhập thành công',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,)
-                  ],
-                ))
+                Text(
+                  "Succes",
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+                Spacer(),
+                Text(
+                  'Đăng nhập thành công',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                )
               ],
-            ),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        )
-    );
+            ))
+          ],
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ));
   }
 
   // Thông báo yêu cầu điền thông tin đầy đủ
   _errorNullMessage(BuildContext context) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Container(
-            padding: const EdgeInsets.all(8),
-            height: 80,
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 179, 89, 89),
-                borderRadius: BorderRadius.all(Radius.circular(10))
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Container(
+        padding: const EdgeInsets.all(8),
+        height: 80,
+        decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 179, 89, 89),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: const Row(
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.white,
+              size: 40,
             ),
-            child: const Row(
+            SizedBox(
+              width: 15,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.error_outline, color: Colors.white, size: 40,),
-
-                SizedBox(width: 15,),
-
-                Expanded(child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Opps. An Error Occured",
-                      style: TextStyle(fontSize: 15, color: Colors.white),),
-
-                    Spacer(),
-                    Text('Vui lòng điền đầy đủ thông tin.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,)
-                  ],
-                ))
+                Text(
+                  "Opps. An Error Occured",
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+                Spacer(),
+                Text(
+                  'Vui lòng điền đầy đủ thông tin.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                )
               ],
-            ),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        )
-    );
+            ))
+          ],
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ));
   }
 
   // Thông báo Email không hợp lệ
   _errorEmailMessage(BuildContext context) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Container(
-            padding: const EdgeInsets.all(8),
-            height: 90,
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 179, 89, 89),
-                borderRadius: BorderRadius.all(Radius.circular(10))
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Container(
+        padding: const EdgeInsets.all(8),
+        height: 90,
+        decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 179, 89, 89),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: const Row(
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.white,
+              size: 40,
             ),
-            child: const Row(
+            SizedBox(
+              width: 15,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.error_outline, color: Colors.white, size: 40,),
-
-                SizedBox(width: 15,),
-
-                Expanded(child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Opps. An Error Occured",
-                      style: TextStyle(fontSize: 15, color: Colors.white),),
-
-                    Spacer(),
-                    Text('Email không hợp lệ. Vui lòng kiểm tra lại.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,)
-                  ],
-                ))
+                Text(
+                  "Opps. An Error Occured",
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+                Spacer(),
+                Text(
+                  'Email không hợp lệ. Vui lòng kiểm tra lại.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                )
               ],
-            ),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        )
-    );
+            ))
+          ],
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ));
   }
 
 // Thông báo Mật khẩu không hợp lệ
   _errorMessage(BuildContext context) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Container(
-            padding: const EdgeInsets.all(8),
-            height: 110,
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 179, 89, 89),
-                borderRadius: BorderRadius.all(Radius.circular(10))
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Container(
+        padding: const EdgeInsets.all(8),
+        height: 110,
+        decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 179, 89, 89),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: const Row(
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.white,
+              size: 40,
             ),
-            child: const Row(
+            SizedBox(
+              width: 15,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.error_outline, color: Colors.white, size: 40,),
-
-                SizedBox(width: 15,),
-
-                Expanded(child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Opps. An Error Occured",
-                      style: TextStyle(fontSize: 15, color: Colors.white),),
-
-                    Spacer(),
-                    Text('Tài khoản hoặc mật khẩu không đúng,'
-                        ' Không thể Đăng nhập!',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,)
-                  ],
-                ))
+                Text(
+                  "Opps. An Error Occured",
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+                Spacer(),
+                Text(
+                  'Tài khoản hoặc mật khẩu không đúng,'
+                  ' Không thể Đăng nhập!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                )
               ],
-            ),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        )
-    );
+            ))
+          ],
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ));
   }
 
   bool _isEmailValid(String email) {
@@ -463,40 +512,65 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
 
     progressDialog.show();
     try {
-      final user = await _auth.loginUserWithEmailAndPassword(emailController.text.trim(), passwordController.text.trim());
+      final user = await _auth.loginUserWithEmailAndPassword(
+          emailController.text.trim(), passwordController.text.trim());
       if (user != null) {
+        // Lấy role của user từ Firebase
+        String? role = await _auth.getUserRole(user);
+        print("User Role: $role"); // Add this line for debugging
         progressDialog.hide();
         _succesMessage(context);
+
         // Chờ một khoảng thời gian trước khi điều hướng
         await Future.delayed(const Duration(milliseconds: 500));
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            transitionDuration: const Duration(milliseconds: 500),
-            // Độ dài của animation
-            pageBuilder: (context, animation,
-                secondaryAnimation) => const DashBoardScreen(),
-            // Builder cho trang chủ
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0); // Bắt đầu từ ngoài phải
-              const end = Offset.zero; // Kết thúc ở vị trí ban đầu
-              const curve = Curves.ease; // Kiểu animation
-              var tween = Tween(begin: begin, end: end).chain(
-                  CurveTween(curve: curve)); // Tạo tween
-              var offsetAnimation = animation.drive(
-                  tween); // Áp dụng tween vào animation
-              return SlideTransition(
-                position: offsetAnimation,
-                // Sử dụng SlideTransition với animation đã thiết lập
-                child: child,
-              );
-            },
-          ),
-        );
+        if (role == 'admin') {
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const DashboardAdminWidget(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                const curve = Curves.ease;
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
+                return SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                );
+              },
+            ),
+          );
+        } else if (role == 'user') {
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const DashBoardScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                const curve = Curves.ease;
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
+                return SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                );
+              },
+            ),
+          );
+        }
       } else {
         progressDialog.hide();
         _errorMessage(context); // Hiển thị thông báo lỗi
       }
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       progressDialog.hide();
       if (e.code == 'user-not-found') {
         _errorMessage(context);
@@ -509,6 +583,5 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
       progressDialog.hide();
       _errorMessage(context);
     }
-
   }
 }
