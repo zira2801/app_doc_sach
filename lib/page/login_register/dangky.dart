@@ -1,3 +1,4 @@
+import 'package:app_doc_sach/controller/controller.dart';
 import 'package:app_doc_sach/page/login_register/button/button_global_dk.dart';
 import 'package:app_doc_sach/page/login_register/dangnhap.dart';
 import 'package:app_doc_sach/page/login_register/service/auth_service.dart';
@@ -5,13 +6,15 @@ import 'package:app_doc_sach/view/dashboard/dashboard_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 import '../../color/mycolor.dart';
+import '../../controller/auth_controller.dart';
 import '../../model/user_model.dart';
 import 'button/button_global.dart';
 import 'form/form_dangnhap/text_form.dart';
-
 class DangKyWidget extends StatefulWidget {
   const DangKyWidget({super.key});
 
@@ -72,9 +75,11 @@ class _DangKyWidgetState extends State<DangKyWidget> {
       obscureRePassword = !obscureRePassword; // Thay đổi trạng thái hiển thị/ẩn mật khẩu
     });
   }
+  final AuthController authController = AuthController.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -180,7 +185,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
 
   //Đăng ký
   void _handleSignUp() async {
-    // Kiểm tra trường nhập liệu không được trống
+   // Kiểm tra trường nhập liệu không được trống
     if (emailController.text.isEmpty || passwordController.text.isEmpty || repasswordController.text.isEmpty) {
       _errorNullMessage(context);
       return;
@@ -202,85 +207,14 @@ class _DangKyWidgetState extends State<DangKyWidget> {
       _errorRePassMessage(context);
       return;
     }
-
-    // Hiển thị tiện ích loading
-    progressDialog.show();
-
     try {
-      // Kiểm tra xem người dùng đã tồn tại trong cơ sở dữ liệu chưa
-      bool userExists = await checkIfUserExists(emailController.text);
-      if (userExists) {
-        // Đóng tiện ích loading
-        progressDialog.hide();
-        _errorAccountExistMessage(context);
-        return;
-      }
-
       // Thực hiện đăng ký người dùng
       await _signup();
-      // Đăng ký thành công, thêm thông tin người dùng vào Firebase Realtime Database
-      DatabaseReference userRef = FirebaseDatabase.instance.reference().child('TaiKhoan');
-      DatabaseReference newUserRef = userRef.push(); // Tạo một tham chiếu mới và lấy ID
-      String newUserId = newUserRef.key!; // Lấy ID của mục mới được tạo
-
-      User user = User(
-          id: newUserId,
-          email: emailController.text,
-          password: passwordController.text,
-          displayName: '',
-          ho: '',
-          tenLot: '',
-          ten: '',
-          soDienThoai: '',
-          gioiTinh: '',
-          diaChi:'',
-          ngaySinh: '',
-          avatar: '',
-          role: '',
-          loaitaikhoan: 'email'
-      );
-      // Lưu thông tin người dùng vào Firebase Realtime Database
-      await newUserRef.set(user.toJson()); // Lưu thông tin người dùng vào cơ sở dữ liệu
-
-      // Đóng tiện ích loading
-      progressDialog.hide();
-
-      // Hiển thị thông báo thành công
-      _succesMessage(context);
-
-      // Chờ 2 giây trước khi chuyển đến trang chủ
-      await Future.delayed(const Duration(seconds: 2));
-      // Ẩn thông báo thành công
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      final user1 = await _auth.loginUserWithEmailAndPassword(emailController.text.trim(), passwordController.text.trim());
-      if(user1 != null){
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            transitionDuration: const Duration(milliseconds: 500), // Độ dài của animation
-            pageBuilder: (context, animation, secondaryAnimation) => const DashBoardScreen(), // Builder cho trang chủ
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0); // Bắt đầu từ ngoài phải
-              const end = Offset.zero; // Kết thúc ở vị trí ban đầu
-              const curve = Curves.ease; // Kiểu animation
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve)); // Tạo tween
-              var offsetAnimation = animation.drive(tween); // Áp dụng tween vào animation
-              return SlideTransition(
-                position: offsetAnimation, // Sử dụng SlideTransition với animation đã thiết lập
-                child: child,
-              );
-            },
-          ),
-        );
-      }
-      else{
-        print('Error during sign up');
-      }
-
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Error during sign up: $e');
       // Đóng tiện ích loading
-      progressDialog.hide();
+     /* progressDialog.hide();*/
       // Hiển thị thông báo lỗi cho người dùng
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -297,7 +231,7 @@ class _DangKyWidgetState extends State<DangKyWidget> {
 
     try {
       // Gọi phương thức đăng ký người dùng từ AuthService
-      await _auth.createUserWithEmailAndPassword(email, password);
+      authController.signUp(fullName: "fullName", email: email, password: password, context: context);
       // Nếu đăng ký thành công, bạn có thể thực hiện các hành động khác ở đây
     } catch (e) {
       // Nếu xảy ra lỗi, throw lên ngoài để xử lý ở phương thức gọi

@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:app_doc_sach/provider/ui_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/product_phobien.dart';
 
@@ -80,7 +83,7 @@ class _KhamPhaWidgetState extends State<KhamPhaWidget> {
                       'Sách phổ biến',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -88,9 +91,154 @@ class _KhamPhaWidgetState extends State<KhamPhaWidget> {
                   ),
                 ),
                 const SizedBox(height: 10,),
-                slide()
-                          ],
-                        ),
+                slide(),
+                const SizedBox(height: 5,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Gợi ý cho bạn',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                 gridview_goiy(),
+                const SizedBox(height: 10,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Kinh dị - Trinh thám',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                gridview_goiy(),
+                const SizedBox(height: 10,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Tiểu sử - Hồi ký - Danh nhân',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                gridview_goiy(),
+                const SizedBox(height: 10,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Truyện ngắn - Tuyển tập',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                gridview_goiy(),
+                const SizedBox(height: 10,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Truyện cười - Hài hước',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                gridview_goiy(),
+                const SizedBox(height: 10,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Cổ tích - Dân gian',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                gridview_goiy(),
+                const SizedBox(height: 10,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Tâm lý - Giáo dục',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                gridview_goiy(),
+                const SizedBox(height: 10,),
+                const  Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Khoa học viễn tưởng - Phiêu lưu',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                gridview_goiy(),
+                const SizedBox(height: 30,)
+              ],
+              ),
             ],
           ),
         ),
@@ -123,13 +271,18 @@ class _KhamPhaWidgetState extends State<KhamPhaWidget> {
 }
 
 List<ProductPhobien> listProduct = [
-  ProductPhobien(id: '1', tenSach: 'Mat Biec', theLoai: 'Tinh cam', image: 'assets/book/matbiec.png'),
-  ProductPhobien(id: '2', tenSach: 'Thuy Kieu', theLoai: 'Tinh cam', image: 'assets/book/thuykieu.png'),
-  ProductPhobien(id: '3', tenSach: 'No hoa sen', theLoai: 'Tinh cam', image: 'assets/book/nohoasen.png'),
+  ProductPhobien(id: '1', tenSach: 'Mắt biếc', theLoai: 'Tinh cam', image: 'assets/book/matbiec.png'),
+  ProductPhobien(id: '2', tenSach: 'Truyện Kiều', theLoai: 'Tinh cam', image: 'assets/book/thuykieu.png'),
+  ProductPhobien(id: '3', tenSach: 'Từng bước nở hoa sen', theLoai: 'Tinh cam', image: 'assets/book/nohosenbia2.png'),
+  ProductPhobien(id: '4', tenSach: 'Từng bước nở hoa sen', theLoai: 'Tinh cam', image: 'assets/book/nohosenbia2.png'),
+  ProductPhobien(id: '5', tenSach: 'Từng bước nở hoa sen', theLoai: 'Tinh cam', image: 'assets/book/nohosenbia2.png'),
+  ProductPhobien(id: '6', tenSach: 'Từng bước nở hoa sen', theLoai: 'Tinh cam', image: 'assets/book/nohosenbia2.png'),
+  ProductPhobien(id: '7', tenSach: 'Từng bước nở hoa sen', theLoai: 'Tinh cam', image: 'assets/book/nohosenbia2.png'),
+  ProductPhobien(id: '8', tenSach: 'Từng bước nở hoa sen', theLoai: 'Tinh cam', image: 'assets/book/nohosenbia2.png'),
 ];
 Widget slide() {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+    padding: const EdgeInsets.only(bottom: 15, left: 10, right: 10),
     child: Container(
       height: 180,
       decoration: BoxDecoration(
@@ -168,7 +321,7 @@ Widget slide() {
                     child: Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: FittedBox(
@@ -183,31 +336,47 @@ Widget slide() {
                         ),
                         Expanded(
                           flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 20, left: 20, right: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.tenSach,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          child: Consumer <UiProvider>(
+                            builder: (context,UiProvider notifier, child) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 3, left: 20, right: 20,top: 5),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product.tenSach,
+                                      style: TextStyle(
+                                        color: notifier.isDark ? Colors.white : Colors.black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      'Thể loại: ${product.theLoai}',
+                                      style: TextStyle(
+                                        color: notifier.isDark ? Colors.white : Colors.black,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5,),
+                                    const Row(
+                                      children: [
+                                        Icon(Icons.favorite),
+                                        SizedBox(width: 8,),
+                                        Text('10',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12
+                                        ),)
+                                      ],
+                                    )
+                                  ],
                                 ),
-                                SizedBox(height: 10),
-                                Text(
-                                  'Thể loại: ${product.theLoai}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -222,4 +391,110 @@ Widget slide() {
     ),
   );
 }
+
+Widget gridview_goiy() {
+  return SizedBox(
+    height: 450, // Set a fixed height
+    child: Padding(
+      padding: const EdgeInsets.all(5),
+      child: GridView.builder(
+        scrollDirection: Axis.horizontal,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1.8,
+          mainAxisSpacing: 2.0,
+          crossAxisSpacing: 5.0,
+        ),
+        itemCount: listProduct.length,
+        itemBuilder: (BuildContext context, index) {
+          final product = listProduct[index];
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+            children: [
+              Card(
+                color: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              product.image,
+                              fit: BoxFit.cover,
+                              height: 160,
+                              width: double.infinity,
+
+                            ),
+                          ),
+                          Positioned(
+                            top: 5,
+                            left: 5,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Text(
+                                product.theLoai,
+                                style: TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    product.tenSach,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 3),
+              const Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Tac Gia',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Colors.black54 ,
+                      fontSize: 11,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ]
+          );
+        },
+      ),
+    ),
+  );
+}
+
 
