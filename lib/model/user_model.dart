@@ -1,55 +1,49 @@
+import "dart:convert";
+
+import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_database/firebase_database.dart";
-
-class User {
+import "package:hive/hive.dart";
+part 'user_model.g.dart';
+Users usersFromJson(String str) => Users.fromJson(json.decode(str));
+@HiveType(typeId: 8)
+class Users {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String email;
-  final String password; // Note: It's not recommended to store passwords in plain text, consider using Firebase Authentication instead
-  final String displayName;
-  final String ho;
-  final String tenLot;
-  final String ten;
-  final String soDienThoai;
-  final String gioiTinh;
-  final String diaChi;
-  final String ngaySinh;
-  final String avatar;
-  final String role;
-  final String loaitaikhoan;
+  @HiveField(2)
+  final String fullName;
+  @HiveField(3)
+  final String phone;
+  @HiveField(4)
+  final String gender;
+  @HiveField(5)
+  final String address;
+  @HiveField(6)
+  final DateTime? age;
+  @HiveField(7)
+  final String? avatar;
 
-//hàm khởi tạo
-  User(
-      {required this.id,
-      required this.email,
-      required this.password,
-      required this.displayName,
-      required this.ho,
-      required this.tenLot,
-      required this.ten,
-      required this.soDienThoai,
-      required this.gioiTinh,
-      required this.diaChi,
-      required this.ngaySinh,
-      required this.avatar,
-      required this.role,
-      required this.loaitaikhoan});
+  Users({
+    required this.id,
+    required this.email,
+    required this.fullName,
+    required this.phone,
+    required this.gender,
+    required this.address,
+    required this.age,
+    required this.avatar,
+  });
 
-  // Convert User object to a Map
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'password': password,
-      'displayName': displayName,
-      'ho': ho,
-      'tenLot': tenLot,
-      'ten': ten,
-      'soDienThoai': soDienThoai,
-      'gioiTinh': gioiTinh,
-      'diaChi': diaChi,
-      'ngaySinh': ngaySinh,
-      'anhDocGia': avatar,
-      'role': role,
-      'loaidangnhap': loaitaikhoan
-    };
+  factory Users.fromJson(Map<String, dynamic> data) =>
+       Users(
+        id: data['id'].toString(),
+        fullName: data['fullName'].toString(), // Xử lý trường hợp fullName là null
+        email: data['email'].toString() ,
+        age: data['age'] == null ? null : DateTime.parse(data['age']), // Xử lý trường hợp age là null
+        phone: data['phone'].toString(),
+        gender: data['gender'].toString(),
+        address: data['address'].toString(),
+        avatar: data.containsKey('image') ? (data['image'] != null ? data['image']['url'] : null) : null,
+      );
   }
-}

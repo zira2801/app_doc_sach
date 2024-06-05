@@ -16,6 +16,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
+import '../../controller/auth_controller.dart';
 import '../../view/dashboard/dashboard_screen.dart';
 
 class DangNhapWidget extends StatefulWidget {
@@ -90,7 +91,7 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
     emailController.dispose();
     passwordController.dispose();
   }
-
+  final AuthController authController = AuthController.instance;
   @override
   Widget build(BuildContext context) {
     //WillPopScope là một widget trong Flutter cho phép bạn can thiệp và
@@ -296,53 +297,6 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
     );
   }
 
-  _succesMessage(BuildContext context) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Container(
-        padding: const EdgeInsets.all(8),
-        height: 80,
-        decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 81, 146, 83),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: const Row(
-          children: [
-            Icon(
-              Icons.check_circle,
-              color: Colors.white,
-              size: 40,
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Succes",
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                ),
-                Spacer(),
-                Text(
-                  'Đăng nhập thành công',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                )
-              ],
-            ))
-          ],
-        ),
-      ),
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-    ));
-  }
-
   // Thông báo yêu cầu điền thông tin đầy đủ
   _errorNullMessage(BuildContext context) {
     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -509,68 +463,9 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
       _errorEmailMessage(context);
       return;
     }
-
-    progressDialog.show();
     try {
-      final user = await _auth.loginUserWithEmailAndPassword(
-          emailController.text.trim(), passwordController.text.trim());
-      if (user != null) {
-        // Lấy role của user từ Firebase
-        String? role = await _auth.getUserRole(user);
-        print("User Role: $role"); // Add this line for debugging
-        progressDialog.hide();
-        _succesMessage(context);
-
-        // Chờ một khoảng thời gian trước khi điều hướng
-        await Future.delayed(const Duration(milliseconds: 500));
-        if (role == 'admin') {
-          Navigator.of(context).pushReplacement(
-            PageRouteBuilder(
-              transitionDuration: const Duration(milliseconds: 500),
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  const DashboardAdminWidget(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                const curve = Curves.ease;
-                var tween = Tween(begin: begin, end: end)
-                    .chain(CurveTween(curve: curve));
-                var offsetAnimation = animation.drive(tween);
-                return SlideTransition(
-                  position: offsetAnimation,
-                  child: child,
-                );
-              },
-            ),
-          );
-        } else if (role == 'user') {
-          Navigator.of(context).pushReplacement(
-            PageRouteBuilder(
-              transitionDuration: const Duration(milliseconds: 500),
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  const DashBoardScreen(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                const curve = Curves.ease;
-                var tween = Tween(begin: begin, end: end)
-                    .chain(CurveTween(curve: curve));
-                var offsetAnimation = animation.drive(tween);
-                return SlideTransition(
-                  position: offsetAnimation,
-                  child: child,
-                );
-              },
-            ),
-          );
-        }
-      } else {
-        progressDialog.hide();
-        _errorMessage(context); // Hiển thị thông báo lỗi
-      }
-    } on FirebaseAuthException catch (e) {
+      authController.signIn(email: emailController.text, password: passwordController.text, context: context);
+    }on FirebaseAuthException catch (e) {
       progressDialog.hide();
       if (e.code == 'user-not-found') {
         _errorMessage(context);
@@ -580,7 +475,7 @@ class _DangNhapWidgetState extends State<DangNhapWidget> {
         _errorMessage(context);
       }
     } catch (e) {
-      progressDialog.hide();
+      /*progressDialog.hide();*/
       _errorMessage(context);
     }
   }
