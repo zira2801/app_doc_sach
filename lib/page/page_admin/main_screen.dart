@@ -28,18 +28,18 @@ class MainScreen extends StatelessWidget {
         child: Row(
           children: [
             if (isDesktop)
-              Expanded(
+              const Expanded(
                 flex: 2,
                 child: SizedBox(
                   child: SideWidgetMenu(),
                 ),
               ),
-            Expanded(
+            const Expanded(
               flex: 7,
               child: DashboardWidget(),
             ),
             if (isDesktop)
-              Expanded(
+              const Expanded(
                 flex: 3,
                 child: SummaryWidget(),
               ),

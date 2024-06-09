@@ -15,7 +15,8 @@ class SummaryWidget extends StatelessWidget {
       ),
       child: const Padding(
         padding: EdgeInsets.all(20.0),
-        child: Column(
+        child: SingleChildScrollView(
+          child:  Column(
           children: [
             SizedBox(height: 20),
             Chart(),
@@ -28,6 +29,7 @@ class SummaryWidget extends StatelessWidget {
             SizedBox(height: 40),
             Scheduled(),
           ],
+        ),
         ),
       ),
     );

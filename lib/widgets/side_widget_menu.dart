@@ -1,65 +1,56 @@
-import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/data/side_menu_data.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class SideWidgetMenu extends StatefulWidget {
-  const SideWidgetMenu({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _SideWidgetState();
-}
-
-class _SideWidgetState extends State<SideWidgetMenu> {
-  int selectedIndex = 0;
+class SideWidgetMenu extends StatelessWidget {
+  const SideWidgetMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final data = SideMenuData();
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
-      child: ListView.builder(
-        itemCount: data.menu.length,
-        itemBuilder: (context, index) => buildMenuEntry(data, index),
-      ),
-    );
-  }
-
-  Widget buildMenuEntry(SideMenuData data, int index) {
-    final isSelected = selectedIndex == index;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      //một lớp trong Flutter cung cấp các tùy chọn trang trí cho Container, 
-      //chẳng hạn như màu nền, viền, bo góc, hình ảnh nền, và các hiệu ứng gradient
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-        color: isSelected ? selectionColor : Colors.transparent,
-      ),
-      child: InkWell(
-        onTap: () => setState(() {
-          selectedIndex = index;
-        }),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
-              child: Icon(
-                data.menu[index].icon,
-                color: isSelected ? Colors.black : Colors.grey,
-              ),
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
             ),
-            Text(
-              data.menu[index].title,
+            child: Text(
+              'Menu',
               style: TextStyle(
-                fontSize: 16,
-                color: isSelected ? Colors.black : Colors.grey,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: Colors.white,
+                fontSize: 24,
               ),
             ),
-          ],
-        ),
+          ),
+          //...:nó chèn all phần tử của 1 danh sách vào một list khác
+          ...SideMenuData().menu.map((menuItem) {
+            return ListTile(
+              leading: Icon(menuItem.icon),
+              title: Text(menuItem.title),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                switch (menuItem.title) {
+                  case 'Dashboard':
+                    Navigator.pushNamed(context, '/homepage');
+                    break;
+                  case 'Book':
+                    Navigator.pushNamed(context, '/bookpage');
+                    break;
+                  case 'Category':
+                    Navigator.pushNamed(context, '/category');
+                    break;
+                  case 'Author':
+                    Navigator.pushNamed(context, '/author');
+                    break;
+                  case 'User':
+                    Navigator.pushNamed(context, '/user');
+                    break;
+                  // Add other cases for different menu items here
+                }
+              },
+            );
+          }).toList(),
+        ],
       ),
     );
   }

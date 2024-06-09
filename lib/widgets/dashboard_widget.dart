@@ -17,7 +17,7 @@ class DashboardWidget extends StatelessWidget {
       child: SingleChildScrollView(child:Column(
           children: [
             const SizedBox(height: 18),
-            const  HeaderWidget(),
+            const HeaderWidget(),
             const SizedBox(height: 18),
             const ActivityDetailsCard(),
             const SizedBox(height: 18),
