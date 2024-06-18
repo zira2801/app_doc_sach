@@ -1,35 +1,42 @@
 import 'package:app_doc_sach/const/constant.dart';
-import 'package:app_doc_sach/model/category_model.dart';
-import 'package:app_doc_sach/page/page_admin/category/category_details.dart';
-import 'package:app_doc_sach/page/page_admin/category/create_category.dart';
+import 'package:app_doc_sach/model/author_model.dart';
+import 'package:app_doc_sach/page/page_admin/author/author_details.dart';
+import 'package:app_doc_sach/page/page_admin/author/create_author.dart';
 import 'package:app_doc_sach/widgets/side_widget_menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class DisplayCategory extends StatefulWidget {
-  const DisplayCategory({Key? key}) : super(key: key);
+class DisplayAuthor extends StatefulWidget {
+  const DisplayAuthor({Key? key}) : super(key: key);
   @override
-  _DisplayCategorysState createState() => _DisplayCategorysState();
+  _DisplayAuthorState createState() => _DisplayAuthorState();
 }
 
-class _DisplayCategorysState extends State<DisplayCategory> {
-  List<Category> category = [];
-  Future<List<Category>> getAll() async {
+class _DisplayAuthorState extends State<DisplayAuthor> {
+  List<Author> author = [];
+  Future<List<Author>> getAll() async {
     // The await keyword pauses the execution of the function until the HTTP request completes.
     var response =
-        await http.get(Uri.parse("http://192.168.1.5:1337/api/categories/"));
+        await http.get(Uri.parse("http://192.168.1.5:1337/api/authors/"));
     if (response.statusCode == 200) {
-      category.clear();
+      author.clear();
     }
     //dùng để ptich chuỗi trong json
     final decodedData = jsonDecode(response.body);
     for (var u in decodedData["data"]) {
-      category.add(Category(
-          u['id'], u['attributes']["name"], u['attributes']["Description"]));
+      author.add(Author(
+          u['id'], 
+          u['attributes']["authorName"],
+          DateTime.tryParse(u['attributes']["birthDate"] ?? '') ?? DateTime.now(),
+          u['attributes']["born"],
+          u['attributes']["telphone"],
+          u['attributes']["nationality"],
+          u['attributes']["bio"]
+          ));
     }
-    return category;
+    return author;
   }
 
   //nó sẽ ghi đè lên phương thức state
@@ -41,7 +48,7 @@ class _DisplayCategorysState extends State<DisplayCategory> {
     // getAll();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Category'),
+        title: const Text('Author'),
         elevation: 0.0, // Controls the shadow below the app bar
         backgroundColor: backgroundColor,
         actions: [
@@ -55,7 +62,7 @@ class _DisplayCategorysState extends State<DisplayCategory> {
               ),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => CreateCategory()));
+                    MaterialPageRoute(builder: (_) => CreateAuthor()));
               },
               child: const Text('Create'),
             ),
@@ -66,7 +73,7 @@ class _DisplayCategorysState extends State<DisplayCategory> {
       //xây dựng bản sao dữ liệu mới dựa vào future
       body: FutureBuilder(
           future: getAll(),
-          builder: (context, AsyncSnapshot<List<Category>> snapshot) {
+          builder: (context, AsyncSnapshot<List<Author>> snapshot) {
             //kiểm tra xem trạng thái kết nối của snapshot có đang ở chế độ chờ đợi hay không.
             //ConnectionState.waiting nghĩa là đang chờ để nhận dữ liệu từ nguồn dữ liệu.
             //(snapshot là dự liệu sao lưu được lấy từ api)
@@ -84,15 +91,15 @@ class _DisplayCategorysState extends State<DisplayCategory> {
                   itemCount: snapshot.data?.length,
                   itemBuilder: (BuildContext context, index) => InkWell(
                         child: ListTile(
-                          title: Text(snapshot.data![index].name),
-                          subtitle: Text(snapshot.data![index].Description),
+                          title: Text(snapshot.data![index].authorName),
+                          subtitle: Text(snapshot.data![index].bio),
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => MyDetails(
-                                          categories: snapshot.data![index],
-                                        )));
+                                    builder: (_) => AuthorDetails(
+                                          authors: snapshot.data![index],
+                                    )));
                           },
                         ),
                       ));

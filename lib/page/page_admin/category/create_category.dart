@@ -14,28 +14,33 @@ class CreateCategory extends StatefulWidget {
 }
 
 Category category = Category(0, '', '');
+//TextEditingController là một lớp trong Flutter để quản lý trạng thái và xử lý dữ liệu của một TextField.
 TextEditingController nameController =
     TextEditingController(text: category.name);
 TextEditingController descriptionController =
     TextEditingController(text: category.Description);
 
 class _CreateCategoryState extends State<CreateCategory> {
+  //Phương thức save được định nghĩa để gửi một yêu cầu POST đến API để tạo mới một danh mục.
   Future save() async {
     try {
-      Map data1 = {
+      Map data = {
         'data': {
           "name": category.name,
           "Description": category.Description,
         }
       };
       // Encode Map to JSON
-      var body = json.encode(data1);
+      var body = json.encode(data);
       var response = await http.post(
-          Uri.parse("http://192.168.1.7:1337/api/categories/"),
+          Uri.parse("http://192.168.1.5:1337/api/categories/"),
           headers: <String, String>{
             'content-type': 'application/json; charset=UTF-8',
           },
           body: body);
+        //Nếu yêu cầu thành công, 
+        //ứng dụng sẽ điều hướng đến màn hình DisplayCategory 
+        //và xóa tất cả các màn hình khác trong stack điều hướng.
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) => const DisplayCategory()),
@@ -76,10 +81,13 @@ class _CreateCategoryState extends State<CreateCategory> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: double.infinity,
+                  width: double.infinity,//nó sẽ chiếm toàn bộ chiều rộng có sẵn của không gian bố cục.
                   color: Colors.white,
                   child: Textfield(
                     controller: nameController,
+                    //onChanged là một callback được gọi khi giá trị của TextField thay đổi.
+                    //Trong callback này, giá trị mới của TextField (val) 
+                    //được gán cho thuộc tính name của đối tượng category.
                     onChanged: (val) {
                       category.name = val;
                     },

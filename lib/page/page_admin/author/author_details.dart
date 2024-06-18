@@ -1,35 +1,39 @@
 import 'package:app_doc_sach/const/constant.dart';
-import 'package:app_doc_sach/model/category_model.dart';
-import 'package:app_doc_sach/page/page_admin/category/display_category.dart';
-import 'package:app_doc_sach/page/page_admin/category/edit_category.dart';
+import 'package:app_doc_sach/model/author_model.dart';
+import 'package:app_doc_sach/page/page_admin/author/display_author.dart';
+import 'package:app_doc_sach/page/page_admin/author/edit_author.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';  // Import the intl package
 
-class MyDetails extends StatefulWidget {
-  final Category categories;
-  const MyDetails({required this.categories});
+class AuthorDetails extends StatefulWidget {
+  final Author authors;
+  const AuthorDetails({required this.authors});
   @override
-  _MyDetailsState createState() => _MyDetailsState();
+  _AuthorDetailState createState() => _AuthorDetailState();
 }
 
-class _MyDetailsState extends State<MyDetails> {
+class _AuthorDetailState extends State<AuthorDetails> {
   @override
   Widget build(BuildContext context) {
     // sử dụng từ khóa async để cho phép sử dụng await bên trong hàm.
-    void deleteCategory() async {
+    void deleteAuthor() async {
       //http.delete(Uri.parse("http://192.168.1.6:1337/api/categories/${widget.categories.id}")) 
       //gửi một yêu cầu HTTP DELETE đến một API tại địa chỉ http://192.168.1.6:1337/api/categories/<id>,
       // với <id> là giá trị của widget.categories.id. 
       //await đảm bảo rằng hàm sẽ chờ cho đến khi yêu cầu DELETE được thực hiện xong.
       await http.delete(
-        Uri.parse("http://192.168.1.5:1337/api/categories/${widget.categories.id}"),
+        Uri.parse("http://192.168.1.5:1337/api/authors/${widget.authors.id}"),
       );
       //Điều hướng đến màn hình DisplayCategory và xóa tất cả các màn hình khác trong stack điều hướng.
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => const DisplayCategory()),
+        MaterialPageRoute(builder: (BuildContext context) => const DisplayAuthor()),
         (Route<dynamic> route) => false,
       );
     }
+
+    // Format the birth date
+    String formattedBirthDate = DateFormat('yyyy-MM-dd').format(widget.authors.birthDate);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +73,7 @@ class _MyDetailsState extends State<MyDetails> {
                       mainAxisAlignment: MainAxisAlignment.center, // Center align the text vertically
                       children: [
                         Text(
-                          'ID: ${widget.categories.id}',
+                          'ID: ${widget.authors.id}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -78,7 +82,7 @@ class _MyDetailsState extends State<MyDetails> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Name: ${widget.categories.name}',
+                          'Name: ${widget.authors.authorName}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -87,7 +91,43 @@ class _MyDetailsState extends State<MyDetails> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Description: ${widget.categories.Description}',
+                          'Date of birth: $formattedBirthDate',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Born: ${widget.authors.born}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Telephone: ${widget.authors.telphone}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Nationality: ${widget.authors.nationality}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Bio: ${widget.authors.bio}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -114,7 +154,7 @@ class _MyDetailsState extends State<MyDetails> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => EditCategory(categories: widget.categories)),
+                        MaterialPageRoute(builder: (_) => EditAuthor(authors: widget.authors)),
                       );
                     },
                     child: const Text('Edit'),
@@ -127,7 +167,7 @@ class _MyDetailsState extends State<MyDetails> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: deleteCategory,
+                    onPressed: deleteAuthor,
                     child: const Text('Delete'),
                   ),
                 ],

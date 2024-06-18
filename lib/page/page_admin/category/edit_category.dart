@@ -24,6 +24,7 @@ class _EditCategoryState extends State<EditCategory> {
     descriptionController = TextEditingController(text: widget.categories?.Description);
   }
 
+//Phương thức dispose được gọi khi StatefulWidget bị hủy, để giải phóng các tài nguyên đã sử dụng.
   @override
   void dispose() {
     nameController.dispose();
@@ -45,7 +46,7 @@ class _EditCategoryState extends State<EditCategory> {
     var body = json.encode(data1);
     final response = await http.put(
         Uri.parse(
-          "http://192.168.1.7:1337/api/categories/${categories.id}",
+          "http://192.168.1.5:1337/api/categories/${categories.id}",
         ),
         headers: <String, String>{
           'content-type': 'application/json;charset=UTF-8',

@@ -17,7 +17,7 @@ dependencies:
   badges: ^3.1.2
   http: ^1.1.2
   shimmer: ^3.0.0
-  cached_network_image: ^3.3.0
+  cached_network_image: ^3.3.1
   carousel_slider: ^4.2.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -42,6 +42,11 @@ dependencies:
   firebase_core: ^2.29.0
   fl_chart: ^0.68.0
   flutter_svg: ^2.0.5
+  country_picker: ^2.0.26
+  country_icons: ^2.0.0
+  image_picker: ^0.8.4+3
+  universal_io: ^2.0.4
+  flutter_cache_manager: ^3.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,6 +85,8 @@ flutter:
     - assets/
     - assets/icon/
     - assets/book/
+    - assets/images/avatar.png
+    - assets/placeholder.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
