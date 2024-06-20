@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-
 import 'package:app_doc_sach/model/user_model.dart';
 import 'package:app_doc_sach/service/local_service/local_auth_service.dart';
 import 'package:app_doc_sach/service/remote_auth_service.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../const.dart';
 import '../view/dashboard/dashboard_screen.dart';
 
 class AuthController extends GetxController {
@@ -326,5 +325,102 @@ class AuthController extends GetxController {
     prefs.setString('token', token);
   }
 
+
+
+  _succesUpdateMessage(BuildContext context){
+    return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            padding: const EdgeInsets.all(8),
+            height: 80,
+            decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 81, 146, 83),
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+            child: const Row(
+              children: [
+                Icon(Icons.check_circle,color: Colors.white,size: 40,),
+
+                SizedBox(width: 15,),
+
+                Expanded(child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Succes", style: TextStyle(fontSize: 15,color: Colors.white),),
+
+                    Spacer(),
+                    Text('Tạo tài khoản thành công...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,)
+                  ],
+                ))
+              ],
+            ),
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        )
+    );
+  }
+
+  Future<void> UpdateProfile({
+    required String fullName,
+    required String phone,
+    required String address,
+    required DateTime age,
+    required String gender,
+    required String email,
+  }) async {
+    try {
+      EasyLoading.show(
+        status: 'Updating profile...',
+        dismissOnTap: false,
+      );
+
+      // Lấy token từ local service
+      String? token = _localAuthService.getToken();
+      if (token == null) {
+        throw Exception("Token is not available");
+      }
+
+      // Tìm ID của người dùng bằng email
+      var userId = await RemoteAuthService().getUserIdByEmail(email, token);
+      if (userId == null) {
+        throw Exception("User not found");
+      }
+      // Gọi hàm updateProfile từ RemoteAuthService
+      var response = await RemoteAuthService().updateProfile(
+        token: token,
+        userId: userId,
+        fullName: fullName,
+        phone: phone,
+        address: address,
+        age: age, // Đảm bảo age là kiểu String*/
+        gender: gender,
+      );
+
+      // Kiểm tra kết quả trả về từ response
+      if (response.statusCode == 200) {
+        print('Profile updated successfully');
+      } else {
+        print("Failed to update profile: ${response.statusCode} ${response.reasonPhrase}");
+      }
+    } catch (e) {
+      // Xử lý các loại lỗi khác nhau
+      if (e is TypeError) {
+        // Xử lý lỗi khi có sự không phù hợp kiểu dữ liệu
+        print("Type error occurred: $e");
+      } else {
+        print("Exception occurred: $e");
+      }
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
 
 }

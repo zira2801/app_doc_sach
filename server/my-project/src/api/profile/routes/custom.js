@@ -11,6 +11,22 @@ module.exports = {
             path: '/profile/me',
             handler: 'profile.createMe',
             config: {}
-        }
+        },
+
+        {
+            method: 'GET',
+            path: '/profile/id-by-email',
+            handler: 'profile.findIdByEmail',
+            config: {}
+        },
+
+        {
+            "method": "GET",
+            "path": "/profiles",
+            "handler": "profile.findUser",
+            "config": {
+              "policies": []
+            }
+          },
     ]
 }
