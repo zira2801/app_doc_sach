@@ -1,7 +1,7 @@
-import "dart:convert";
-import "package:cached_network_image/cached_network_image.dart";
-import "package:flutter/material.dart";
-import "package:hive/hive.dart";
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 part 'user_model.g.dart';
 
@@ -48,13 +48,13 @@ class Users {
     var attributes = data['attributes'];
     return Users(
       id: data['id'],
-      fullName: attributes['fullName']?.toString() ?? 'N/A',
-      email: attributes['email']?.toString() ?? 'N/A',
-      age: attributes['age'] == null ? null : DateTime.parse(attributes['age']),
-      phone: attributes['phone']?.toString() ?? 'N/A',
-      gender: attributes['gender']?.toString() ?? 'N/A',
-      address: attributes['address']?.toString() ?? 'N/A',
-      image: attributes['image']?.toString() ?? 'N/A',
+      fullName: data['fullName']?.toString() ?? 'N/A',
+      email: data['email']?.toString() ?? 'N/A',
+      age: data['age'] == null ? null : DateTime.parse(attributes['age']),
+      phone: data['phone']?.toString() ?? 'N/A',
+      gender: data['gender']?.toString() ?? 'N/A',
+      address: data['address']?.toString() ?? 'N/A',
+      image: data['image']?.toString() ?? 'N/A',
     );
   }
 
@@ -99,26 +99,5 @@ class Users {
 
   set address(String address) {
     _address = address;
-  }
-
-  // Helper method to display cached network image
-  Widget cachedNetworkImage({
-    double? width,
-    double? height,
-    BoxFit fit = BoxFit.cover,
-    bool roundCorners = false,
-    double borderRadius = 10.0,
-  }) {
-    return ClipRRect(
-      borderRadius: roundCorners ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
-      child: CachedNetworkImage(
-        imageUrl: _image ?? '',
-        width: width,
-        height: height,
-        fit: fit,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      ),
-    );
   }
 }
