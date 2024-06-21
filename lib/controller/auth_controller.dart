@@ -11,7 +11,7 @@ import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../const.dart';
 import '../view/dashboard/dashboard_screen.dart';
-
+import 'package:awesome_dialog/awesome_dialog.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   Rxn<Users> user = Rxn<Users>();
@@ -369,6 +369,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> UpdateProfile({
+    required BuildContext context, // Add context as a parameter
     required String fullName,
     required String phone,
     required String address,
@@ -393,6 +394,7 @@ class AuthController extends GetxController {
       if (userId == null) {
         throw Exception("User not found");
       }
+
       // Gọi hàm updateProfile từ RemoteAuthService
       var response = await RemoteAuthService().updateProfile(
         token: token,
@@ -400,15 +402,35 @@ class AuthController extends GetxController {
         fullName: fullName,
         phone: phone,
         address: address,
-        age: age, // Đảm bảo age là kiểu String*/
+        age: age, // Đảm bảo age là kiểu DateTime
         gender: gender,
       );
 
       // Kiểm tra kết quả trả về từ response
       if (response.statusCode == 200) {
         print('Profile updated successfully');
+        // Show success dialog
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          animType: AnimType.topSlide,
+          showCloseIcon: true,
+          title: "Success",
+          desc: "Your profile has been updated successfully.",
+          btnOkOnPress: () {},
+        ).show();
       } else {
         print("Failed to update profile: ${response.statusCode} ${response.reasonPhrase}");
+        // Show failure dialog
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.topSlide,
+          showCloseIcon: true,
+          title: "Error",
+          desc: "Failed to update profile. Please try again.",
+          btnOkOnPress: () {},
+        ).show();
       }
     } catch (e) {
       // Xử lý các loại lỗi khác nhau
@@ -418,9 +440,18 @@ class AuthController extends GetxController {
       } else {
         print("Exception occurred: $e");
       }
+      // Show exception dialog
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.topSlide,
+        showCloseIcon: true,
+        title: "Error",
+        desc: "An error occurred: $e",
+        btnOkOnPress: () {},
+      ).show();
     } finally {
       EasyLoading.dismiss();
     }
   }
-
 }

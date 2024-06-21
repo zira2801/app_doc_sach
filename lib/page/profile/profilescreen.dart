@@ -13,6 +13,7 @@ import '../../service/remote_auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io' show File;
 import 'package:http_parser/http_parser.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
 
@@ -523,16 +524,29 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             height: 50,
                             child: ElevatedButton(
                               onPressed: () {
-                                String ageString = _ageController.text.trim();
-                                DateTime? parsedAge = DateFormat('dd-MM-yyyy').parse(ageString);
-                                AuthController.instance.UpdateProfile(
-                                  fullName: _nameController.text,
-                                  phone: _phoneController.text,
-                                  address: _addressController.text,
-                                  gender: selectedGender ?? '',
-                                  email: _emailController.text,
-                                  age:parsedAge ?? DateTime.now(),
-                                );
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.warning,
+                                  animType: AnimType.topSlide,
+                                  showCloseIcon: true,
+                                  title: "Xác nhận",
+                                  desc: "Bạn có chắc muốn lưu thay đổi?",
+                                  btnCancelOnPress: () {},
+                                  btnOkOnPress: () {
+                                    // Proceed with updating the profile if the user confirms
+                                    String ageString = _ageController.text.trim();
+                                    DateTime? parsedAge = DateFormat('dd-MM-yyyy').parse(ageString);
+                                    AuthController.instance.UpdateProfile(
+                                      context: context,
+                                      fullName: _nameController.text,
+                                      phone: _phoneController.text,
+                                      address: _addressController.text,
+                                      gender: selectedGender ?? '',
+                                      email: _emailController.text,
+                                      age: parsedAge ?? DateTime.now(),
+                                    );
+                                  },
+                                ).show();
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: MyColor.primaryColor,

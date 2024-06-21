@@ -70,10 +70,10 @@ class CommentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('dd/MM/yyyy').format(comment.date);
     return Container(
-      padding: const EdgeInsets.only(left:  13.0,right: 13,bottom: 13),
+      padding: EdgeInsets.all(13.0),
       child: Container(
         decoration: BoxDecoration(
-            color: const Color.fromRGBO(232, 245, 233,10),
+            color: Color.fromRGBO(232, 245, 233,10),
             borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
