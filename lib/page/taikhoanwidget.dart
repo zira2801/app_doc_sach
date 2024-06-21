@@ -1,6 +1,7 @@
 import 'package:app_doc_sach/color/mycolor.dart';
 import 'package:app_doc_sach/page/login_register/button/DangNhapDangKyWidget.dart';
 import 'package:app_doc_sach/page/login_register/button/DangXuatWidget.dart';
+import 'package:app_doc_sach/page/page_tab_taikhoanwidget/gia_han_goi.dart';
 import 'package:app_doc_sach/provider/ui_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -110,24 +111,32 @@ class _TaiKhoanWidgetState extends State<TaiKhoanWidget> {
                       ),
                       title: Padding(
                         padding: const EdgeInsets.only(bottom: 4),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 10,),
-                          Text('Gia hạn gói',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: notifier.isDark ? Colors.white : Colors.grey.shade800,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => GiaHanGoi()),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 10,),
+                            Text('Gia hạn gói',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: notifier.isDark ? Colors.white : Colors.grey.shade800,
+                                  ),
+                                  textAlign: TextAlign.end, // Align text to the right
                                 ),
-                                textAlign: TextAlign.end, // Align text to the right
+                              const Spacer(),
+                              const Icon(
+                                Icons.navigate_next_sharp,
+                                size: 25,
+                                color: MyColor.primaryColor,
                               ),
-                            const Spacer(),
-                            const Icon(
-                              Icons.navigate_next_sharp,
-                              size: 25,
-                              color: MyColor.primaryColor,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
