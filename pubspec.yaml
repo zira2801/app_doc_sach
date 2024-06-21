@@ -50,6 +50,14 @@ dependencies:
   restart_app: ^1.2.1
   google_sign_in: ^6.2.1
   flutter_easyloading: ^3.0.5
+  google_fonts: ^6.2.1
+  flutter_pdfview: ^1.3.2
+  pdf: ^3.6.0
+  file_picker: ^8.0.5
+  syncfusion_flutter_pdfviewer: ^26.1.35
+  image_picker: ^1.1.2
+  permission_handler: ^11.3.1
+  http_parser: ^4.0.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
@@ -65,6 +73,7 @@ dev_dependencies:
   intl: ^0.19.0
   flutter_launcher_icons: "^0.13.1"
   flutter_lints: ^3.0.0
+  awesome_dialog: ^3.2.1
 flutter_launcher_icons:
     android: "launcher_icon"
     ios: true
@@ -95,6 +104,8 @@ flutter:
     - assets/
     - assets/icon/
     - assets/book/
+    - assets/danhngon/
+    - assets/file_book/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

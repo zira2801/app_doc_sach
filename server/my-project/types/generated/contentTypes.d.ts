@@ -377,7 +377,6 @@ export interface ApiProfileProfile extends Schema.CollectionType {
     fullName: Attribute.String & Attribute.Required;
     email: Attribute.Email & Attribute.Required;
     age: Attribute.Date;
-    image: Attribute.Media<'images'>;
     user: Attribute.Relation<
       'api::profile.profile',
       'oneToOne',
@@ -386,6 +385,7 @@ export interface ApiProfileProfile extends Schema.CollectionType {
     phone: Attribute.String;
     gender: Attribute.String;
     address: Attribute.Text;
+    image: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

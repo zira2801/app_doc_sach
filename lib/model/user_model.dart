@@ -44,6 +44,7 @@ class Users {
         phone: data['phone'].toString(),
         gender: data['gender'].toString(),
         address: data['address'].toString(),
-        avatar: data.containsKey('image') ? (data['image'] != null ? data['image']['url'] : null) : null,
+        avatar: data['image'].toString(),
+        /*avatar: data.containsKey('image') ? (data['image'].toString().isNotEmpty ? data['image']['url'] : null) : null,*/
       );
   }
