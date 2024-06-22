@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/ui_provider.dart';
+import '../page_admin/dashboard_admin.dart';
 
 class SlashScreen extends StatefulWidget {
   const SlashScreen({super.key});
@@ -44,7 +45,7 @@ class _SlashScreenState extends State<SlashScreen>
       });
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const DashBoardScreen(),
+          pageBuilder: (_, __, ___) => const DashBoardScreen() /*DashboardAdminWidget()*/,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: animation,

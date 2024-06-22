@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_doc_sach/const.dart';
 import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/model/author_model.dart';
 import 'package:app_doc_sach/page/page_admin/author/display_author.dart';
@@ -89,7 +90,7 @@ class _EditAuthorState extends State<EditAuthor> {
     // Encode Map to JSON
     var body = json.encode(data);
     final response = await http.put(
-      Uri.parse("http://192.168.1.5:1337/api/authors/${authors.id}"),
+      Uri.parse("$baseUrl/api/authors/${authors.id}"),
       headers: <String, String>{
         'content-type': 'application/json;charset=UTF-8',
       },

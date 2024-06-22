@@ -1,3 +1,4 @@
+import 'package:app_doc_sach/const.dart';
 import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/model/author_model.dart';
 import 'package:app_doc_sach/page/page_admin/author/display_author.dart';
@@ -23,7 +24,7 @@ class _AuthorDetailState extends State<AuthorDetails> {
       // với <id> là giá trị của widget.categories.id. 
       //await đảm bảo rằng hàm sẽ chờ cho đến khi yêu cầu DELETE được thực hiện xong.
       await http.delete(
-        Uri.parse("http://192.168.1.5:1337/api/authors/${widget.authors.id}"),
+        Uri.parse("$baseUrl/api/authors/${widget.authors.id}"),
       );
       //Điều hướng đến màn hình DisplayCategory và xóa tất cả các màn hình khác trong stack điều hướng.
       Navigator.of(context).pushAndRemoveUntil(
