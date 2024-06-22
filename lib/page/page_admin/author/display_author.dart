@@ -18,25 +18,65 @@ class DisplayAuthor extends StatefulWidget {
 class _DisplayAuthorState extends State<DisplayAuthor> {
   List<Author> author = [];
   Future<List<Author>> getAll() async {
-    // The await keyword pauses the execution of the function until the HTTP request completes.
-    var response =
-        await http.get(Uri.parse("$baseUrl/api/authors/"));
+    // Thực hiện yêu cầu HTTP GET và đợi cho đến khi hoàn thành
+    var response = await http.get(Uri.parse("$baseUrl/api/authors/"));
+
+    // In ra mã trạng thái HTTP của phản hồi
+    print('Response status: ${response.statusCode}');
+
+    // In ra nội dung phản hồi
+    print('Response body: ${response.body}');
+
     if (response.statusCode == 200) {
-      author.clear();
+      author.clear();  // Xóa danh sách tác giả hiện tại
+    } else {
+      print('Failed to fetch authors: ${response.statusCode}');
+      return [];
     }
-    //dùng để ptich chuỗi trong json
+
+    // Phân tích cú pháp chuỗi JSON
     final decodedData = jsonDecode(response.body);
+
+    // In ra dữ liệu sau khi phân tích cú pháp JSON
+    print('Decoded data: $decodedData');
+
     for (var u in decodedData["data"]) {
+      // Kiểm tra từng thuộc tính trước khi thêm vào danh sách
+      print('Data item: $u');
+
+      var id = u['id'];
+      var authorName = u['attributes']["authorName"] ?? '';
+      var birthDateStr = u['attributes']["birthDate"];
+      var birthDate = DateTime.tryParse(birthDateStr ?? '') ?? DateTime.now();
+      var born = u['attributes']["born"] ?? '';
+      var telphone = u['attributes']["telephone"] ?? '';
+      var nationality = u['attributes']["nationality"] ?? '';
+      var bio = u['attributes']["bio"] ?? '';
+
+      // In ra từng thuộc tính để kiểm tra giá trị
+      print('id: $id');
+      print('authorName: $authorName');
+      print('birthDateStr: $birthDateStr');
+      print('birthDate: $birthDate');
+      print('born: $born');
+      print('telphone: $telphone');
+      print('nationality: $nationality');
+      print('bio: $bio');
+
       author.add(Author(
-         id: u['id'],
-         authorName:  u['attributes']["authorName"],
-         birthDate:  DateTime.tryParse(u['attributes']["birthDate"] ?? '') ?? DateTime.now(),
-         born:  u['attributes']["born"],
-         telphone:  u['attributes']["telphone"],
-         nationality:  u['attributes']["nationality"],
-         bio:  u['attributes']["bio"]
-          ));
+        id: id,
+        authorName: authorName,
+        birthDate: birthDate,
+        born: born,
+        telphone: telphone,
+        nationality: nationality,
+        bio: bio,
+      ));
     }
+
+    // In ra danh sách tác giả sau khi thêm tất cả mục dữ liệu
+    print('Author list: $author');
+
     return author;
   }
 

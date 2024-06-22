@@ -76,6 +76,8 @@ dev_dependencies:
   awesome_dialog: ^3.2.1
   country_picker: ^2.0.26
   fl_chart: ^0.68.0
+  adaptive_dialog: ^2.1.0
+  quickalert: ^1.1.0
 flutter_launcher_icons:
     android: "launcher_icon"
     ios: true

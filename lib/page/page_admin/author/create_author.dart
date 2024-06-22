@@ -15,46 +15,49 @@ class CreateAuthor extends StatefulWidget {
   @override
   _CreateAuthorState createState() => _CreateAuthorState();
 }
-
-Author author = Author(id:0,authorName:  '',birthDate:  DateTime.now(),born:  '',telphone:  '',nationality:  '',bio:  '');
-
-// TextEditingController is a class in Flutter to manage the state and handle data of a TextField.
-TextEditingController authorNameController =
-    TextEditingController(text: author.authorName);
-TextEditingController birthDateController =
-    TextEditingController(text: DateFormat('yyyy-MM-dd').format(author.birthDate));
-TextEditingController bornController = TextEditingController(text: author.born);
-TextEditingController teleController =
-    TextEditingController(text: author.telphone);
-TextEditingController nationalityController =
-    TextEditingController(text: author.nationality);
-TextEditingController bioController = TextEditingController(text: author.bio);
-
 class _CreateAuthorState extends State<CreateAuthor> {
+  Author author = Author(id: 0, authorName: '', birthDate: DateTime.now(), born: '', telphone: '', nationality: '', bio: '');
+
+  late TextEditingController authorNameController;
+  late TextEditingController birthDateController;
+  late TextEditingController bornController;
+  late TextEditingController teleController;
+  late TextEditingController nationalityController;
+  late TextEditingController bioController;
+  @override
+  void initState() {
+    super.initState();
+    authorNameController = TextEditingController(text: author.authorName);
+    birthDateController = TextEditingController(text: DateFormat('dd-MM-yyyy').format(author.birthDate));
+    bornController = TextEditingController(text: author.born);
+    teleController = TextEditingController(text: author.telphone);
+    nationalityController = TextEditingController(text: author.nationality);
+    bioController = TextEditingController(text: author.bio);
+  }
   Future save() async {
     try {
       Map data = {
         'data': {
           "authorName": author.authorName,
-          "birthDate": DateFormat('yyyy-MM-dd').format(author.birthDate),
+          "birthDate": DateFormat('dd-MM-yyyy').format(author.birthDate),
           "born": author.born,
-          "telphone": author.telphone,
+          "telephone": author.telphone,
           "nationality": author.nationality,
           "bio": author.bio,
         }
       };
       var body = json.encode(data);
       var response =
-          await http.post(Uri.parse("$baseUrl/api/authors/"),
-              headers: <String, String>{
-                'content-type': 'application/json; charset=UTF-8',
-              },
-              body: body);
+      await http.post(Uri.parse("$baseUrl/api/authors/"),
+          headers: <String, String>{
+            'content-type': 'application/json; charset=UTF-8',
+          },
+          body: body);
       if (response.statusCode == 200) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (BuildContext context) => const DisplayAuthor()),
-            (Route<dynamic> route) => false);
+                (Route<dynamic> route) => false);
       } else {
         print('Failed to create author: ${response.body}');
       }
@@ -72,8 +75,8 @@ class _CreateAuthorState extends State<CreateAuthor> {
     );
     if (picked != null && picked != author.birthDate) {
       setState(() {
-        author.birthDate = picked;
-        birthDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+        author.birthDate = picked; // Cập nhật ngày sinh vào đối tượng author
+        birthDateController.text = DateFormat('dd-MM-yyyy').format(picked);
       });
     }
   }
@@ -132,7 +135,7 @@ class _CreateAuthorState extends State<CreateAuthor> {
                         hintStyle: const TextStyle(color: Colors.black54),
                         icon: const Icon(Icons.date_range),
                         onChanged: (String val) {
-                          // No-op, as the value is selected using the date picker.
+                          author.birthDate = DateFormat('dd-MM-yyyy').parse(val);
                         },
                       ),
                     ),

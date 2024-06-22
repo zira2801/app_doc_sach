@@ -1,13 +1,13 @@
 import 'package:intl/intl.dart';
 
 class Author {
-  final int id;
-  late final String authorName;
-  late final DateTime birthDate;
-  late final String born;
-  late final String telphone;
-  late final String nationality;
-  late final String bio;
+  int id;
+   String authorName;
+  DateTime birthDate;
+  String born;
+  String telphone;
+  String nationality;
+  String bio;
 
   Author({
     required this.id,

@@ -34,7 +34,7 @@ class _AuthorDetailState extends State<AuthorDetails> {
     }
 
     // Format the birth date
-    String formattedBirthDate = DateFormat('yyyy-MM-dd').format(widget.authors.birthDate);
+    String formattedBirthDate = DateFormat('dd-MM-yyy').format(widget.authors.birthDate);
 
     return Scaffold(
       appBar: AppBar(

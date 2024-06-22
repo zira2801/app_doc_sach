@@ -31,7 +31,7 @@ class _EditAuthorState extends State<EditAuthor> {
         TextEditingController(text: widget.authors?.authorName);
     birthDateController = TextEditingController(
       text: widget.authors?.birthDate != null
-          ? DateFormat('yyyy-MM-dd').format(widget.authors!.birthDate)
+          ? DateFormat('dd-MM-yyyy').format(widget.authors!.birthDate)
           : '',
     );
     bornController = TextEditingController(text: widget.authors?.born);
@@ -62,7 +62,7 @@ class _EditAuthorState extends State<EditAuthor> {
     if (picked != null && picked != widget.authors?.birthDate) {
       setState(() {
         widget.authors?.birthDate = picked;
-        birthDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+        birthDateController.text = DateFormat('dd-MM-yyyy').format(picked);
       });
     }
   }
@@ -81,7 +81,7 @@ class _EditAuthorState extends State<EditAuthor> {
         "authorName": authorName,
         "birthDate": DateFormat('yyyy-MM-dd').format(birthDate),
         "born": born,
-        "telphone": telphone,
+        "telephone": telphone,
         "nationality": nationality,
         "bio": bio,
       }
@@ -89,21 +89,44 @@ class _EditAuthorState extends State<EditAuthor> {
 
     // Encode Map to JSON
     var body = json.encode(data);
-    final response = await http.put(
-      Uri.parse("$baseUrl/api/authors/${authors.id}"),
-      headers: <String, String>{
-        'content-type': 'application/json;charset=UTF-8',
-      },
-      body: body,
-    );
 
-    print(response.body);
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-          builder: (BuildContext context) => const DisplayAuthor()),
-      (Route<dynamic> route) => false,
-    );
+    try {
+      final response = await http.put(
+        Uri.parse("$baseUrl/api/authors/${authors.id}"),
+        headers: <String, String>{
+          'content-type': 'application/json;charset=UTF-8',
+        },
+        body: body,
+      );
+
+      print("Data after update: $data");
+      print("Response status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        // Nếu thành công, chuyển hướng về trang DisplayAuthor
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (BuildContext context) => const DisplayAuthor(),
+          ),
+              (Route<dynamic> route) => false,
+        );
+      } else {
+        // Xử lý lỗi, hiển thị thông báo lỗi phù hợp
+        setState(() {
+          print("Failed to update author. Please try again.");
+        });
+      }
+    } catch (e) {
+      // Xử lý lỗi trong trường hợp request bị lỗi
+      setState(() {
+       print("Error: $e");
+      });
+    } finally {
+      setState(() {
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +164,7 @@ class _EditAuthorState extends State<EditAuthor> {
                     controller: authorNameController,
                     onChanged: (val) {
                       setState(() {
-                        widget.authors?.authorName = val;
+                        authorNameController.text = val;
                       });
                     },
                     hintText: 'Name',
@@ -160,7 +183,7 @@ class _EditAuthorState extends State<EditAuthor> {
                         onChanged: (val) {
                           setState(() {
                             widget.authors?.birthDate =
-                                DateFormat('yyyy-MM-dd').parse(val);
+                                DateFormat('dd-MM-yyyy').parse(val);
                           });
                         },
                         hintText: 'Birth Date',
@@ -254,15 +277,38 @@ class _EditAuthorState extends State<EditAuthor> {
                       ),
                     ),
                     onPressed: () {
-                      editAuthor(
-                        authors: widget.authors!,
-                        authorName: authorNameController.text,
-                        birthDate: DateFormat('yyyy-MM-dd')
-                            .parse(birthDateController.text),
-                        born: bornController.text,
-                        telphone: teleController.text,
-                        nationality: nationalityController.text,
-                        bio: bioController.text,
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Xác nhận cập nhật'),
+                            content: Text('Bạn có chắc chắn muốn cập nhật thông tin này không?'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('Huỷ'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Đóng dialog
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Đồng ý'),
+                                onPressed: () {
+                                  // Gọi hàm để thực hiện cập nhật ở đây
+                                  editAuthor(
+                                    authors: widget.authors!,
+                                    authorName: authorNameController.text,
+                                    birthDate: DateFormat('dd-MM-yyyy').parse(birthDateController.text),
+                                    born: bornController.text,
+                                    telphone: teleController.text,
+                                    nationality: nationalityController.text,
+                                    bio: bioController.text,
+                                  );
+                                  Navigator.of(context).pop(); // Đóng dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                     child: const Text('Save'),
