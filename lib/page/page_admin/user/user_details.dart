@@ -1,9 +1,12 @@
+import 'package:app_doc_sach/const.dart';
+import 'package:app_doc_sach/page/page_admin/user/edit_user.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/model/user_model.dart';
 import 'package:app_doc_sach/page/page_admin/user/display_user.dart';
+import 'package:intl/intl.dart';
 
 class UserDetails extends StatefulWidget {
   final Users users;
@@ -29,9 +32,14 @@ class _UserDetailsState extends State<UserDetails> {
 
   @override
   Widget build(BuildContext context) {
+    // Construct the full URL for the image
+    String imageUrl = widget.users.image?.isNotEmpty == true
+        ? '$baseUrl${widget.users.image}'
+        : 'https://via.placeholder.com/200'; // Placeholder image URL
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Details'),
+        title: const Text('User Details'),
         elevation: 0.0,
         backgroundColor: backgroundColor,
       ),
@@ -86,7 +94,7 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Age: ${widget.users.age}',
+                      'Age: ${widget.users.age != null ? DateFormat('yyyy-MM-dd').format(widget.users.age!) : 'N/A'}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -95,7 +103,7 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
                     const SizedBox(height: 10),
                     CachedNetworkImage(
-                      imageUrl: widget.users.image ?? '',
+                      imageUrl: imageUrl,
                       height: 200,
                       width: 200,
                       fit: BoxFit.cover,
@@ -154,7 +162,12 @@ class _UserDetailsState extends State<UserDetails> {
                             ),
                           ),
                           onPressed: () {
-                            // Edit functionality can be added here
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) =>
+                                      EditUser(users: widget.users)),
+                            );
                           },
                           child: const Text('Edit'),
                         ),
