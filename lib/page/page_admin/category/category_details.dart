@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class MyDetails extends StatefulWidget {
-  final Category categories;
+  final CategoryModel categories;
   const MyDetails({required this.categories});
   @override
   _MyDetailsState createState() => _MyDetailsState();
@@ -78,7 +78,7 @@ class _MyDetailsState extends State<MyDetails> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Name: ${widget.categories.name}',
+                          'Name: ${widget.categories.nameCategory}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class _MyDetailsState extends State<MyDetails> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Description: ${widget.categories.Description}',
+                          'Description: ${widget.categories.desCategory}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

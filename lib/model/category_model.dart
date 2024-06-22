@@ -1,7 +1,7 @@
 class CategoryModel {
-  final int? id;
-  final String nameCategory;
-  final String desCategory;
+   int? id;
+   String nameCategory;
+   String desCategory;
 
   CategoryModel(
       {required this.id,

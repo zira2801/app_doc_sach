@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class EditCategory extends StatefulWidget {
-  final Category? categories;
+  final CategoryModel? categories;
   const EditCategory({Key? key, this.categories});
   @override
   _EditCategoryState createState() => _EditCategoryState();
@@ -20,8 +20,8 @@ class _EditCategoryState extends State<EditCategory> {
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.categories?.name);
-    descriptionController = TextEditingController(text: widget.categories?.Description);
+    nameController = TextEditingController(text: widget.categories?.nameCategory);
+    descriptionController = TextEditingController(text: widget.categories?.desCategory);
   }
 
 //Phương thức dispose được gọi khi StatefulWidget bị hủy, để giải phóng các tài nguyên đã sử dụng.
@@ -33,7 +33,7 @@ class _EditCategoryState extends State<EditCategory> {
   }
 
   void editCategory(
-      {required Category categories,
+      {required CategoryModel categories,
       required String name,
       required String Description}) async {
     Map data1 = {
@@ -94,7 +94,7 @@ class _EditCategoryState extends State<EditCategory> {
                     controller: nameController,
                     onChanged: (val) {
                       setState(() {
-                        widget.categories?.name = val;
+                        widget.categories?.nameCategory = val;
                       });
                     },
                     hintText: 'Name',
@@ -109,7 +109,7 @@ class _EditCategoryState extends State<EditCategory> {
                     controller: descriptionController,
                     onChanged: (val) {
                       setState(() {
-                        widget.categories?.Description = val;
+                        widget.categories?.desCategory = val;
                       });
                     },
                     hintText: 'Description',

@@ -1,3 +1,4 @@
+import 'package:app_doc_sach/const.dart';
 import 'package:app_doc_sach/model/author_model.dart';
 import 'package:app_doc_sach/page/page_admin/author/display_author.dart';
 import 'package:app_doc_sach/page/page_admin/category/textfield.dart';
@@ -15,7 +16,7 @@ class CreateAuthor extends StatefulWidget {
   _CreateAuthorState createState() => _CreateAuthorState();
 }
 
-Author author = Author(0, '', DateTime.now(), '', '', '', '');
+Author author = Author(id:0,authorName:  '',birthDate:  DateTime.now(),born:  '',telphone:  '',nationality:  '',bio:  '');
 
 // TextEditingController is a class in Flutter to manage the state and handle data of a TextField.
 TextEditingController authorNameController =
@@ -44,7 +45,7 @@ class _CreateAuthorState extends State<CreateAuthor> {
       };
       var body = json.encode(data);
       var response =
-          await http.post(Uri.parse("http://192.168.1.5:1337/api/authors/"),
+          await http.post(Uri.parse("$baseUrl/api/authors/"),
               headers: <String, String>{
                 'content-type': 'application/json; charset=UTF-8',
               },

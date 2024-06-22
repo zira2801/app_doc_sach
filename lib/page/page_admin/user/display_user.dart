@@ -34,7 +34,7 @@ class _DisplayUsersState extends State<DisplayUser> {
               gender: attributes["gender"]?.toString() ?? 'N/A',
               address: attributes["address"]?.toString() ?? 'N/A',
               age: attributes["age"] != null ? DateTime.parse(attributes["age"]) : null,
-              image: attributes["image"],
+              avatar: attributes["image"],
             );
             users.add(user);
           } catch (e) {

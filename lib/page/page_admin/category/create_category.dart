@@ -1,6 +1,7 @@
+import 'package:app_doc_sach/model/category_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:app_doc_sach/const/constant.dart';
-import 'package:app_doc_sach/model/category_model.dart';
 import 'package:app_doc_sach/page/page_admin/category/display_category.dart';
 import 'package:app_doc_sach/page/page_admin/category/textfield.dart';
 import 'package:http/http.dart' as http;
@@ -13,12 +14,12 @@ class CreateCategory extends StatefulWidget {
   _CreateCategoryState createState() => _CreateCategoryState();
 }
 
-Category category = Category(0, '', '');
+CategoryModel category = CategoryModel(id:  0,nameCategory:  '',desCategory:  '');
 //TextEditingController là một lớp trong Flutter để quản lý trạng thái và xử lý dữ liệu của một TextField.
 TextEditingController nameController =
-    TextEditingController(text: category.name);
+    TextEditingController(text: category.nameCategory);
 TextEditingController descriptionController =
-    TextEditingController(text: category.Description);
+    TextEditingController(text: category.desCategory);
 
 class _CreateCategoryState extends State<CreateCategory> {
   //Phương thức save được định nghĩa để gửi một yêu cầu POST đến API để tạo mới một danh mục.
@@ -26,8 +27,8 @@ class _CreateCategoryState extends State<CreateCategory> {
     try {
       Map data = {
         'data': {
-          "name": category.name,
-          "Description": category.Description,
+          "name": category.nameCategory,
+          "Description": category.desCategory,
         }
       };
       // Encode Map to JSON
@@ -89,7 +90,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                     //Trong callback này, giá trị mới của TextField (val) 
                     //được gán cho thuộc tính name của đối tượng category.
                     onChanged: (val) {
-                      category.name = val;
+                      category.nameCategory = val;
                     },
                     hintText: 'Name',
                     icon: const Icon(Icons.book_sharp),
@@ -102,7 +103,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                   child: Textfield(
                     controller: descriptionController,
                     onChanged: (val) {
-                      category.Description = val;
+                      category.desCategory = val;
                     },
                     hintText: 'Description',
                     hintStyle: const TextStyle(color: Colors.black54),

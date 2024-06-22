@@ -27,7 +27,7 @@ Users users = Users(
   fullName: '',
   email: '',
   age: DateTime.now(),
-  image: '',
+  avatar: '',
   phone: '',
   gender: '',
   address: '',
@@ -136,7 +136,7 @@ class _CreateUserState extends State<CreateUser> {
             "age": users.age != null
                 ? DateFormat('yyyy-MM-dd').format(users.age!)
                 : '',
-            "image": users.image,
+            "image": users.avatar,
             "phone": users.phone,
             "gender": users.gender,
             "address": users.address,

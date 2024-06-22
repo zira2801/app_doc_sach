@@ -169,7 +169,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         var imageUrl = await uploadImage(_imageFile!);
 
         // Update profile with the image URL
-        String userId = authController.user.value?.id ?? '';
+        String userId = authController.user.value?.id.toString() ?? '';
         var profileUpdateResponse = await updateProfileImage(userId, imageUrl);
 
         // Handle response from profile update API

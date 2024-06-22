@@ -95,7 +95,7 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
                     const SizedBox(height: 10),
                     CachedNetworkImage(
-                      imageUrl: widget.users.image ?? '',
+                      imageUrl: widget.users.avatar ?? '',
                       height: 200,
                       width: 200,
                       fit: BoxFit.cover,

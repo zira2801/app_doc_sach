@@ -9,7 +9,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../const.dart';
 import '../view/dashboard/dashboard_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 class AuthController extends GetxController {
