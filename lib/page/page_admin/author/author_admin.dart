@@ -6,6 +6,8 @@ import 'package:app_doc_sach/page/page_admin/main_screen.dart';
 import 'package:app_doc_sach/page/page_admin/user/user_admin.dart';
 import 'package:flutter/material.dart';
 
+import '../book/book_admin.dart';
+
 class AuthorAdminWidget extends StatelessWidget{
     const AuthorAdminWidget({super.key});
 

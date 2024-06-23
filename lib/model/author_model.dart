@@ -18,7 +18,17 @@ class Author {
     required this.nationality,
     required this.bio,
   });
-
+  factory Author.fromJson(Map<String, dynamic> json) {
+    return Author(
+      id: json['id'],
+      authorName: json['attributes']['authorName'] ?? '',
+      birthDate: DateTime.parse(json['attributes']['birthDate']),
+      born: json['attributes']['born'] ?? '',
+      telphone: json['attributes']['telephone'] ?? '',
+      nationality: json['attributes']['nationality'] ?? '',
+      bio: json['attributes']['bio'] ?? '',
+    );
+  }
   @override
   String toString() {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
