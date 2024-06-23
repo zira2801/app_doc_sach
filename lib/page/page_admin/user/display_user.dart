@@ -19,7 +19,7 @@ class _DisplayUsersState extends State<DisplayUser> {
 
   Future<List<Users>> getAll() async {
     try {
-      var response = await http.get(Uri.parse("http://192.168.1.5:1337/api/profiles/"));
+      var response = await http.get(Uri.parse("http://10.21.3.140:1337/api/profiles/"));
       if (response.statusCode == 200) {
         users.clear();
         final decodedData = jsonDecode(response.body);

@@ -23,20 +23,6 @@
     "age": {
       "type": "date"
     },
-    "image": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
-    "user": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "profile"
-    },
     "phone": {
       "type": "string",
       "required": false
@@ -48,6 +34,9 @@
     "address": {
       "type": "text",
       "required": false
+    },
+    "image": {
+      "type": "string"
     }
   }
 }

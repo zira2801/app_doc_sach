@@ -362,6 +362,42 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiAuthorAuthor extends Schema.CollectionType {
+  collectionName: 'authors';
+  info: {
+    singularName: 'author';
+    pluralName: 'authors';
+    displayName: 'Author';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    authorName: Attribute.String;
+    birthDate: Attribute.Date;
+    born: Attribute.String;
+    telphone: Attribute.String;
+    nationality: Attribute.String;
+    bio: Attribute.Text;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::author.author',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::author.author',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiCategoryCategory extends Schema.CollectionType {
   collectionName: 'categories';
   info: {
@@ -408,15 +444,10 @@ export interface ApiProfileProfile extends Schema.CollectionType {
     fullName: Attribute.String & Attribute.Required;
     email: Attribute.Email & Attribute.Required;
     age: Attribute.Date;
-    image: Attribute.Media<'images'>;
-    user: Attribute.Relation<
-      'api::profile.profile',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
     phone: Attribute.String;
     gender: Attribute.String;
     address: Attribute.Text;
+    image: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -796,11 +827,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    profile: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::profile.profile'
-    >;
     type: Attribute.String & Attribute.Required;
     role_user: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
@@ -877,6 +903,7 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
       'api::profile.profile': ApiProfileProfile;
       'plugin::upload.file': PluginUploadFile;

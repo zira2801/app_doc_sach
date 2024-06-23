@@ -89,7 +89,7 @@ class _EditAuthorState extends State<EditAuthor> {
     // Encode Map to JSON
     var body = json.encode(data);
     final response = await http.put(
-      Uri.parse("http://192.168.1.5:1337/api/authors/${authors.id}"),
+      Uri.parse("http://10.21.3.140:1337/api/authors/${authors.id}"),
       headers: <String, String>{
         'content-type': 'application/json;charset=UTF-8',
       },

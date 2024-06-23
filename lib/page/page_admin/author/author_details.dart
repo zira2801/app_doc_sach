@@ -23,7 +23,7 @@ class _AuthorDetailState extends State<AuthorDetails> {
       // với <id> là giá trị của widget.categories.id. 
       //await đảm bảo rằng hàm sẽ chờ cho đến khi yêu cầu DELETE được thực hiện xong.
       await http.delete(
-        Uri.parse("http://192.168.1.5:1337/api/authors/${widget.authors.id}"),
+        Uri.parse("http://10.21.3.140:1337/api/authors/${widget.authors.id}"),
       );
       //Điều hướng đến màn hình DisplayCategory và xóa tất cả các màn hình khác trong stack điều hướng.
       Navigator.of(context).pushAndRemoveUntil(

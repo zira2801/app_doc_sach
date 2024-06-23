@@ -20,7 +20,7 @@ class UserDetails extends StatefulWidget {
 class _UserDetailsState extends State<UserDetails> {
   void deleteUsers() async {
     await http.delete(
-      Uri.parse("http://192.168.1.5:1337/api/profiles/${widget.users.id}"),
+      Uri.parse("http://10.21.3.140:1337/api/profiles/${widget.users.id}"),
     );
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
@@ -29,6 +29,8 @@ class _UserDetailsState extends State<UserDetails> {
       (Route<dynamic> route) => false,
     );
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

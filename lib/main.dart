@@ -2,6 +2,7 @@
 import 'package:app_doc_sach/color/mycolor.dart';
 import 'package:app_doc_sach/controller/controller.dart';
 import 'package:app_doc_sach/model/user_model.dart';
+import 'package:app_doc_sach/page/page_admin/dashboard_admin.dart';
 import 'package:app_doc_sach/page/slash_screen/slash_screen.dart';
 import 'package:app_doc_sach/provider/ui_provider.dart';
 import 'package:app_doc_sach/route/app_page.dart';
@@ -104,7 +105,7 @@ class MyApp extends StatelessWidget {
             }
             return  GetMaterialApp(
               debugShowCheckedModeBanner: false,
-              home: const SlashScreen(),
+              home: const DashboardAdminWidget(),
               initialRoute: AppRoute.dashboard,
               initialBinding: DashboardBinding(),
               getPages: /*[

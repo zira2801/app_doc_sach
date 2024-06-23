@@ -19,7 +19,7 @@ class _DisplayAuthorState extends State<DisplayAuthor> {
   Future<List<Author>> getAll() async {
     // The await keyword pauses the execution of the function until the HTTP request completes.
     var response =
-        await http.get(Uri.parse("http://192.168.1.5:1337/api/authors/"));
+        await http.get(Uri.parse("http://10.21.3.140:1337/api/authors/"));
     if (response.statusCode == 200) {
       author.clear();
     }

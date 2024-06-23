@@ -46,7 +46,7 @@ class _EditCategoryState extends State<EditCategory> {
     var body = json.encode(data1);
     final response = await http.put(
         Uri.parse(
-          "http://192.168.1.5:1337/api/categories/${categories.id}",
+          "http://10.21.3.140:1337/api/categories/${categories.id}",
         ),
         headers: <String, String>{
           'content-type': 'application/json;charset=UTF-8',

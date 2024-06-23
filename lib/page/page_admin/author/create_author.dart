@@ -44,7 +44,7 @@ class _CreateAuthorState extends State<CreateAuthor> {
       };
       var body = json.encode(data);
       var response =
-          await http.post(Uri.parse("http://192.168.1.5:1337/api/authors/"),
+          await http.post(Uri.parse("http://10.21.3.140:1337/api/authors/"),
               headers: <String, String>{
                 'content-type': 'application/json; charset=UTF-8',
               },

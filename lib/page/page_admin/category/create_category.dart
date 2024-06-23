@@ -33,7 +33,7 @@ class _CreateCategoryState extends State<CreateCategory> {
       // Encode Map to JSON
       var body = json.encode(data);
       var response = await http.post(
-          Uri.parse("http://192.168.1.5:1337/api/categories/"),
+          Uri.parse("http://10.21.3.140:1337/api/categories/"),
           headers: <String, String>{
             'content-type': 'application/json; charset=UTF-8',
           },
