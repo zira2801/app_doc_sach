@@ -31,7 +31,7 @@ class _EditAuthorState extends State<EditAuthor> {
         TextEditingController(text: widget.authors?.authorName);
     birthDateController = TextEditingController(
       text: widget.authors?.birthDate != null
-          ? DateFormat('dd-MM-yyyy').format(widget.authors!.birthDate)
+          ? DateFormat('dd-MM-yyyy').format(widget.authors!.birthDate!)
           : '',
     );
     bornController = TextEditingController(text: widget.authors?.born);

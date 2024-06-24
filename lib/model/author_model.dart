@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 class Author {
   int id;
    String authorName;
-  DateTime birthDate;
+  DateTime? birthDate;
   String born;
   String telphone;
   String nationality;
@@ -19,19 +19,24 @@ class Author {
     required this.bio,
   });
   factory Author.fromJson(Map<String, dynamic> json) {
+    DateTime? parsedBirthDate;
+    if (json['attributes']['birthDate'] != null) {
+      parsedBirthDate = DateTime.parse(json['attributes']['birthDate']);
+    }
     return Author(
       id: json['id'],
       authorName: json['attributes']['authorName'] ?? '',
-      birthDate: DateTime.parse(json['attributes']['birthDate']),
+      birthDate: parsedBirthDate, // Điều này sẽ cho phép birthDate có thể là null
       born: json['attributes']['born'] ?? '',
       telphone: json['attributes']['telephone'] ?? '',
       nationality: json['attributes']['nationality'] ?? '',
       bio: json['attributes']['bio'] ?? '',
     );
   }
+
   @override
   String toString() {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    return 'Author(id: $id, authorName: $authorName, birthDate: ${formatter.format(birthDate)}, born: $born, telphone: $telphone, nationality: $nationality, bio: $bio)';
+    return 'Author(id: $id, authorName: $authorName, birthDate: ${formatter.format(birthDate!)}, born: $born, telphone: $telphone, nationality: $nationality, bio: $bio)';
   }
 }

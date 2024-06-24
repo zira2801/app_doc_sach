@@ -98,10 +98,11 @@ class _DisplayBookState extends State<DisplayBook> {
                         borderRadius: BorderRadius.circular(10),
                         child: book.coverImage != ''
                             ? Image.network(
-                          baseUrl + book.coverImage,
+                          baseUrl + book.coverImage!.url,
                           width: 120,
                           height: 180,
                           fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high, // Sử dụng FilterQuality.high để cải thiện chất lượng hình ảnh
                         )
                             : const Icon(Icons.book, size: 80, color: Colors.grey), // Thay thế bằng biểu tượng mặc định khi không có ảnh bìa
                       ),
@@ -156,8 +157,8 @@ class _DisplayBookState extends State<DisplayBook> {
                                       text: 'Tác giả:  ',
                                     ),
                                     TextSpan(
-                                      text: book.authors.isNotEmpty
-                                          ? book.authors.map((author) => author.authorName).join(', ')
+                                      text: book.authors!.isNotEmpty
+                                          ? book.authors!.map((author) => author.authorName).join(', ')
                                           : 'Không có tác giả',
                                       style:  TextStyle(
                                         color: Colors.grey.shade300,
@@ -178,11 +179,11 @@ class _DisplayBookState extends State<DisplayBook> {
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              book.categories.isNotEmpty
+                              book.categories!.isNotEmpty
                                   ? SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: book.categories.map((category) {
+                                  children: book.categories!.map((category) {
                                     return Padding(
                                       padding: const EdgeInsets.only(right: 10.0), // Add some spacing between the chips
                                       child: Chip(
