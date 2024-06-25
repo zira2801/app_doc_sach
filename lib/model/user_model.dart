@@ -5,7 +5,7 @@ Users usersFromJson(String str) => Users.fromJson(json.decode(str));
 @HiveType(typeId: 8)
 class Users {
   @HiveField(0)
-   int id;
+   String? id;
   @HiveField(1)
   String email;
   @HiveField(2)
@@ -22,7 +22,7 @@ class Users {
   String? avatar;
 
   Users({
-    required this.id,
+    this.id,
     required this.email,
     required this.fullName,
     required this.phone,
@@ -34,7 +34,7 @@ class Users {
 
   factory Users.fromJson(Map<String, dynamic> data) =>
        Users(
-        id: data['id'],
+        id: data['id'].toString(),
         fullName: data['fullName'].toString(), // Xử lý trường hợp fullName là null
         email: data['email'].toString() ,
         age: data['age'] == null ? null : DateTime.parse(data['age']), // Xử lý trường hợp age là null

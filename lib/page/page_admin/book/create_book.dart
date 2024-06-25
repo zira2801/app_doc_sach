@@ -1,17 +1,19 @@
-import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:app_doc_sach/color/mycolor.dart';
+import 'package:app_doc_sach/controller/category_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../controller/author_controller.dart';
 import '../../../controller/book_controller.dart';
 import '../../../model/author_model.dart';
 import '../../../model/book_model.dart';
 import '../../../model/category_model.dart';
-import 'dart:html' as html; // Import html package for web compatibility
+/*import 'dart:html' as html; // Import html package for web compatibility*/
 import 'dart:io' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -39,6 +41,7 @@ class _BookCreateState extends State<BookCreate> {
   List<CategoryModel> _categories = []; // Populate this list from your data source
   final BookController _bookService = BookController();
   final AuthorController _authorController = AuthorController.instance;
+  final CategoryController _categoryController = CategoryController.instance;
   Author? _selectedAuthor;
   CategoryModel? _selectedCategory;
   List<CategoryModel> _selectedCategories = []; // Các thể loại đã chọn
@@ -66,6 +69,23 @@ class _BookCreateState extends State<BookCreate> {
     }
   }
 
+  //Load Category
+  Future<void> _loadCategories() async {
+    try {
+      // Example fetch function, replace with your actual fetch logic
+      final List<CategoryModel> fetchedCategories = await _categoryController.fetchCategories(); // Assuming fetchAuthors returns a List<Author>
+
+      setState(() {
+        _categories = fetchedCategories; // Assign the fetched list of authors to _authors
+      });
+    } catch (e) {
+      print('Error loading authors: $e');
+      // Display error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Không thể tải danh sách tác giả. Vui lòng thử lại sau.')),
+      );
+    }
+  }
   List<Author> _extractAuthors(List<Book> books) {
     Set<Author> uniqueAuthors = {};
     books.forEach((book) {
@@ -87,6 +107,7 @@ class _BookCreateState extends State<BookCreate> {
     // TODO: implement initState
     super.initState();
     _loadAuthors();
+    _loadCategories();
   }
 
   //Dialog dnah sach category
@@ -238,26 +259,6 @@ class _BookCreateState extends State<BookCreate> {
     }
   }
 
-
-  Future<Uint8List> _getFileContent(String filePath) async {
-    if (kIsWeb) {
-      // Xử lý cho Flutter Web
-      final html.FileUploadInputElement input = html.FileUploadInputElement()..accept = 'image/*';
-      input.click();
-      await input.onChange.first;
-      if (input.files!.isNotEmpty) {
-        final reader = html.FileReader();
-        reader.readAsArrayBuffer(input.files![0]);
-        await reader.onLoad.first;
-        return reader.result as Uint8List;
-      }
-      throw Exception('Không có file nào được chọn');
-    } else {
-      // Xử lý cho mobile
-      final ByteData data = await rootBundle.load(filePath);
-      return data.buffer.asUint8List();
-    }
-  }
 
 
 
@@ -445,12 +446,6 @@ class _BookCreateState extends State<BookCreate> {
                         borderSide: BorderSide(color: Colors.red, width: 2.0),
                       ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Không được bỏ trống tiêu đề sách';
-                      }
-                      return null;
-                    },
                   ),
                 ),
 
@@ -483,12 +478,6 @@ class _BookCreateState extends State<BookCreate> {
                         borderSide: BorderSide(color: Colors.red, width: 2.0),
                       ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Không được bỏ trống ISBN';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Container(
@@ -523,12 +512,6 @@ class _BookCreateState extends State<BookCreate> {
                         borderSide: BorderSide(color: Colors.red, width: 2.0),
                       ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Không được bỏ trống mô tả';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 const SizedBox(height: 10,),
@@ -562,12 +545,6 @@ class _BookCreateState extends State<BookCreate> {
                       ),
                     ),
                     keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Không được bỏ trống số trang';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Container(
@@ -599,12 +576,6 @@ class _BookCreateState extends State<BookCreate> {
                         borderSide: BorderSide(color: Colors.red, width: 2.0),
                       ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Không được bỏ trống ngôn ngữ';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 const SizedBox(height: 20,),
@@ -687,8 +658,8 @@ class _BookCreateState extends State<BookCreate> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      height: 250,
-                      width: 250,
+                      height: 200,
+                      width: 180,
                       decoration: BoxDecoration(
                         border: Border.all(width: 2, color: Colors.white),
                         borderRadius: BorderRadius.circular(10),
@@ -737,12 +708,12 @@ class _BookCreateState extends State<BookCreate> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 50,),
+                    const SizedBox(width: 10,),
                     ElevatedButton(
                       onPressed: () {
                         _pickImage(); // Call function to pick an image
                       },
-                      child: const Text('Chọn ảnh bìa'),
+                      child: const Text('Chọn ảnh bìa',style: TextStyle(fontSize: 12),),
                     ),
                   ],
                 ),
@@ -769,7 +740,85 @@ class _BookCreateState extends State<BookCreate> {
                         ),
                       ),
                       onPressed: () {
-                       _createBook();
+                        if (_formKey.currentState!.validate()) {
+                          if (_selectedAuthors.isEmpty ||
+                              _selectedCategories.isEmpty ||
+                              _imagePath == null ||
+                              _titleController.text.isEmpty ||
+                              _isbnController.text.isEmpty ||
+                              _descriptionController.text.isEmpty ||
+                              _pagesController.text.isEmpty ||
+                              _languageController.text.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xff2A303E),
+                                        borderRadius: BorderRadius.circular(12)
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset('assets/icon/error.png',width: 50,),
+                                        const SizedBox(height: 24,),
+                                        Text('Thông tin bạn nhập chưa đầy đủ',
+                                            style: GoogleFonts.montserrat(fontSize: 11, color: const Color(0xffEC5B5B), fontWeight: FontWeight.bold)),
+                                        const SizedBox(height: 5,),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            if (_selectedAuthors.isEmpty)
+                                              Text('• Vui lòng chọn ít nhất một tác giả',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_selectedCategories.isEmpty)
+                                              Text('• Vui lòng chọn ít nhất một thể loại',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_imagePath == null)
+                                              Text('• Vui lòng chọn ảnh bìa sách',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_titleController.text.isEmpty)
+                                              Text('• Vui lòng nhập tiêu đề sách',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_isbnController.text.isEmpty)
+                                              Text('• Vui lòng nhập ISBN',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_descriptionController.text.isEmpty)
+                                              Text('• Vui lòng nhập mô tả sách',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_pagesController.text.isEmpty)
+                                              Text('• Vui lòng nhập số trang',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_languageController.text.isEmpty)
+                                              Text('• Vui lòng nhập ngôn ngữ',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            const SizedBox(height: 20,),
+                                            Center(
+                                              child: OutlinedButton(
+                                                onPressed: () {Navigator.of(context).pop();},
+                                                style: OutlinedButton.styleFrom(
+                                                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                                                    foregroundColor: const Color(0xffEC5B5B),
+                                                    side: const BorderSide(color: Color(0xffEC5B5B),)
+                                                ),
+                                                child: const Text('Đóng'),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10,),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            _createBook();
+                          }
+                        }
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -812,34 +861,14 @@ class _BookCreateState extends State<BookCreate> {
     );
   }
 
-  Future<void> _pickImage() async {
-    if (kIsWeb) {
-      // Code xử lý khi ứng dụng chạy trên web
-      html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-      uploadInput.accept = 'image/*';
-      uploadInput.click();
+  void _pickImage() async {
 
-      uploadInput.onChange.listen((e) {
-        final files = uploadInput.files;
-        if (files!.isNotEmpty) {
-          final reader = html.FileReader();
-          reader.readAsDataUrl(files[0]);
-          reader.onLoadEnd.listen((e) {
-            setState(() {
-              _imagePath = reader.result as String;
-            });
-          });
-        }
-      });
-    } else {
-      // Code xử lý khi ứng dụng chạy trên di động hoặc desktop
       final result = await FilePicker.platform.pickFiles(type: FileType.image);
       if (result != null) {
         setState(() {
           _filePickerResult = result;
-          _imagePath = _filePickerResult!.files.single.path!;
+          _imagePath = _filePickerResult!.files.single.path;
         });
-      }
     }
   }
   void _refreshForm() {
@@ -859,5 +888,34 @@ class _BookCreateState extends State<BookCreate> {
       _selectedCategories.clear();
       _selectedAuthors.clear();
     });
-  }
-}
+  }}
+  //void _pickImage() async {
+  //  if (kIsWeb) {
+  //    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+  //    uploadInput.accept = 'image/*';
+ //     uploadInput.click();
+
+ //     uploadInput.onChange.listen((e) {
+  //      final files = uploadInput.files;
+    //    if (files!.isNotEmpty) {
+      //    final reader = html.FileReader();
+        //  reader.readAsDataUrl(files[0]);
+          //reader.onLoadEnd.listen((e) {
+          //  setState(() {
+           //   _imagePath = reader.result as String?;
+           // });
+         // });
+        //}
+   //   });
+  //  } else {
+  //    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+  //    if (result != null) {
+  //      setState(() {
+   //       _filePickerResult = result;
+    //      _imagePath = _filePickerResult!.files.single.path;
+    //    });
+    //  }
+  //  }
+ // }
+
+

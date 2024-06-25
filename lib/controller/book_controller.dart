@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'dart:html' as html;
 import '../const.dart';
 import '../model/file_upload.dart';
 class BookController extends GetxController{

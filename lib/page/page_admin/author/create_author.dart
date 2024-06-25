@@ -39,7 +39,7 @@ class _CreateAuthorState extends State<CreateAuthor> {
       Map data = {
         'data': {
           "authorName": author.authorName,
-          "birthDate": DateFormat('dd-MM-yyyy').format(author.birthDate!),
+          "birthDate": DateFormat('yyyy-MM-dd').format(author.birthDate!),
           "born": author.born,
           "telephone": author.telphone,
           "nationality": author.nationality,

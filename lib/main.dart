@@ -49,7 +49,7 @@ void main() async {
   /* final Future<FirebaseApp> _fApp = Firebase.initializeApp();*/
   /*FirebaseDatabase.instance.databaseURL = "https://appdocsach-77e59-default-rtdb.firebaseio.com/";*/
   await Hive.initFlutter();
-  Hive.registerAdapter(UsersAdapter());
+ Hive.registerAdapter(UsersAdapter());
 
   runApp(MultiProvider(
     providers: [

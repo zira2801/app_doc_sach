@@ -23,7 +23,7 @@ class CreateUser extends StatefulWidget {
 }
 
 Users users = Users(
-  id: 0,
+  id: '',
   fullName: '',
   email: '',
   age: DateTime.now(),
@@ -144,7 +144,7 @@ class _CreateUserState extends State<CreateUser> {
         };
         var body = json.encode(data);
         var response = await http.post(
-          Uri.parse("http://10.21.41.211:1337/api/profiles/"),
+          Uri.parse("$baseUrl/api/profiles/"),
           headers: <String, String>{
             'content-type': 'application/json; charset=UTF-8',
           },
