@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../../const.dart';
+
 class DisplayUser extends StatefulWidget {
   const DisplayUser({Key? key}) : super(key: key);
 
@@ -17,38 +19,30 @@ class DisplayUser extends StatefulWidget {
 class _DisplayUsersState extends State<DisplayUser> {
   List<Users> users = [];
 
-  Future<List<Users>> getAll() async {
+  Future<List<Users>> fetchUsers() async {
     try {
-      var response = await http.get(Uri.parse("http://192.168.1.5:1337/api/profiles/"));
+      var response = await http.get(Uri.parse('$baseUrl/api/profiles/'));
       if (response.statusCode == 200) {
-        users.clear();
         final decodedData = jsonDecode(response.body);
-        for (var u in decodedData["data"]) {
+        for (var u in decodedData) {
           try {
-            var attributes = u['attributes'];
-            Users user = Users(
-              id: u['id'],
-              fullName: attributes["fullName"]?.toString() ?? 'N/A',
-              email: attributes["email"]?.toString() ?? 'N/A',
-              phone: attributes["phone"]?.toString() ?? 'N/A',
-              gender: attributes["gender"]?.toString() ?? 'N/A',
-              address: attributes["address"]?.toString() ?? 'N/A',
-              age: attributes["age"] != null ? DateTime.parse(attributes["age"]) : null,
-              avatar: attributes["image"],
-            );
+            Users user = Users.fromJson(u);
             users.add(user);
           } catch (e) {
             print('Error parsing user data: $e\nData: $u');
           }
         }
+        return users;
       } else {
         print('Failed to load users, status code: ${response.statusCode}');
+        return [];
       }
     } catch (e) {
       print('Error fetching users: $e');
+      return [];
     }
-    return users;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +70,7 @@ class _DisplayUsersState extends State<DisplayUser> {
       ),
       drawer: const SideWidgetMenu(),
       body: FutureBuilder<List<Users>>(
-        future: getAll(),
+        future: fetchUsers(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

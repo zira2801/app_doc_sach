@@ -23,7 +23,7 @@ class CreateUser extends StatefulWidget {
 }
 
 Users users = Users(
-  id: '',
+  id: 0,
   fullName: '',
   email: '',
   age: DateTime.now(),
@@ -125,45 +125,46 @@ class _CreateUserState extends State<CreateUser> {
       }
     }
   }
- 
 
-    Future save() async {
-      try {
-        Map data = {
-          'data': {
-            "fullName": users.fullName,
-            "email": users.email,
-            "age": users.age != null
-                ? DateFormat('yyyy-MM-dd').format(users.age!)
-                : '',
-            "image": users.avatar,
-            "phone": users.phone,
-            "gender": users.gender,
-            "address": users.address,
-          }
-        };
-        var body = json.encode(data);
-        var response = await http.post(
-          Uri.parse("$baseUrl/api/profiles/"),
-          headers: <String, String>{
-            'content-type': 'application/json; charset=UTF-8',
-          },
-          body: body,
-        );
-        if (response.statusCode == 200) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const DisplayUser()),
-              (Route<dynamic> route) => false);
-        } else {
-          print('Failed to create user: ${response.body}');
+
+  Future save() async {
+    try {
+      Map data = {
+        'data': {
+          "fullName": users.fullName,
+          "email": users.email,
+          "age": users.age != null ? DateFormat('yyyy-MM-dd').format(users.age!) : '',
+          "avatar": users.avatar,
+          "phone": users.phone,
+          "gender": users.gender,
+          "address": users.address,
         }
-      } catch (e) {
-        print(e);
-      }
-    }
+      };
+      var body = json.encode(data);
 
-    @override
+      var response = await http.post(
+        Uri.parse("$baseUrl/api/profiles/"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => const DisplayUser()),
+              (Route<dynamic> route) => false,
+        );
+      } else {
+        print('Failed to create user: ${response.body}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+  @override
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(

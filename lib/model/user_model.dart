@@ -5,7 +5,7 @@ Users usersFromJson(String str) => Users.fromJson(json.decode(str));
 @HiveType(typeId: 8)
 class Users {
   @HiveField(0)
-   String? id;
+   int? id;
   @HiveField(1)
   String email;
   @HiveField(2)
@@ -32,16 +32,29 @@ class Users {
     required this.avatar,
   });
 
-  factory Users.fromJson(Map<String, dynamic> data) =>
-       Users(
-        id: data['id'].toString(),
-        fullName: data['fullName'].toString(), // Xử lý trường hợp fullName là null
-        email: data['email'].toString() ,
-        age: data['age'] == null ? null : DateTime.parse(data['age']), // Xử lý trường hợp age là null
-        phone: data['phone'].toString(),
-        gender: data['gender'].toString(),
-        address: data['address'].toString(),
-        avatar: data['image'].toString(),
-        /*avatar: data.containsKey('image') ? (data['image'].toString().isNotEmpty ? data['image']['url'] : null) : null,*/
-      );
+  factory Users.fromJson(Map<String, dynamic> data) {
+    return Users(
+      id: data['id'] is String ? int.tryParse(data['id']) : data['id'],
+      fullName: data['fullName']?.toString() ?? 'N/A',
+      email: data['email']?.toString() ?? 'N/A',
+      phone: data['phone']?.toString() ?? 'N/A',
+      gender: data['gender']?.toString() ?? 'N/A',
+      address: data['address']?.toString() ?? 'N/A',
+      age: data['age'] != null ? DateTime.tryParse(data['age']) : null,
+      avatar: data['image']?.toString() ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fullName': fullName,
+      'email': email,
+      'age': age?.toIso8601String(),
+      'avatar': avatar,
+      'phone': phone,
+      'gender': gender,
+      'address': address,
+    };
+  }
   }
