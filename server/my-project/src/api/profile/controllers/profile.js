@@ -54,4 +54,39 @@ module.exports = createCoreController('api::profile.profile', ({ strapi }) => ({
       ctx.internalServerError('Error retrieving profile');
     }
   },
+
+  async findIdByEmail(ctx) {
+    const { email } = ctx.query; // Lấy giá trị của tham số email từ query string
+    try {
+      const profile = await strapi.db.query('api::profile.profile').findOne({ email });
+  
+      if (!profile) {
+        return ctx.notFound('Profile not found');
+      }
+  
+      return { id: profile.id };
+    } catch (error) {
+      console.error("Error finding profile by email:", error);
+      return ctx.badRequest('Failed to fetch profile ID by email');
+    }
+  },
+
+  // New method to find user
+  async findUser(ctx) {
+    try {
+      const profiles = await strapi.db.query('api::profile.profile').findMany({
+        populate: {
+          user: true,
+        },
+        populate: {
+          image: true, // Đảm bảo rằng image là tên của mối quan hệ trong mô hình profile
+        },
+      });
+
+      return profiles;
+    } catch (err) {
+      console.error('Error retrieving profiles:', err);
+      ctx.throw(500, 'Error retrieving profiles');
+    }
+  }
 }));
