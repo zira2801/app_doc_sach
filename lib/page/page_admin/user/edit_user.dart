@@ -164,7 +164,7 @@ class _EditUserState extends State<EditUser> {
     // Encode Map to JSON
     var body = json.encode(data);
     final response = await http.put(
-      Uri.parse("http://10.21.1.33:1337/api/profiles/${users.id}"),
+      Uri.parse("$baseUrl/api/profiles/${users.id}"),
       headers: <String, String>{
         'content-type': 'application/json;charset=UTF-8',
       },

@@ -55,7 +55,7 @@ class _DisplayUsersState extends State<DisplayUser> {
   // }
 
   Future<List<Users>> fetchUsers() async {
-  final response = await http.get(Uri.parse('http://10.21.1.33:1337/api/profiles/'));
+  final response = await http.get(Uri.parse('$baseUrl/api/profiles/'));
 
   if (response.statusCode == 200) {
     List<dynamic> body = json.decode(response.body);

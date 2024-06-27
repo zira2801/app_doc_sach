@@ -49,7 +49,7 @@ class _CreateUserState extends State<CreateUser> {
   String? _webImagePath;
 
   Future<FileUpload?> uploadImage(dynamic imageData) async {
-    var uri = Uri.parse('http://10.21.1.33:1337/api/upload/');
+    var uri = Uri.parse('$baseUrl/api/upload/');
     var request = http.MultipartRequest('POST', uri);
 
     if (kIsWeb) {

@@ -708,7 +708,7 @@ class _BookCreateState extends State<BookCreate> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(width: 30,),
                     ElevatedButton(
                       onPressed: () {
                         _pickImage(); // Call function to pick an image
