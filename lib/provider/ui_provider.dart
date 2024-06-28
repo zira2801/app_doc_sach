@@ -3,8 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UiProvider extends ChangeNotifier{
-
+class UiProvider extends ChangeNotifier {
   bool _isDark = false;
   bool get isDark => _isDark;
 
@@ -27,7 +26,7 @@ class UiProvider extends ChangeNotifier{
       ));
     } else {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: Colors.white,
+        statusBarColor: Color.fromRGBO(232, 245, 233, 1.0),
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
       ));
@@ -39,22 +38,20 @@ class UiProvider extends ChangeNotifier{
     primaryColor: Colors.black12,
     brightness: Brightness.dark,
     primaryColorDark: Colors.black12,
-
   );
   //Custom light theme
   final lightTheme = ThemeData(
-    primaryColor: Colors.white,
+    primaryColor: Color.fromRGBO(232, 245, 233, 1.0),
     brightness: Brightness.light,
-    primaryColorDark: Colors.white,
+    primaryColorDark: Color.fromRGBO(232, 245, 233, 1.0),
   );
 
   //Save Last Change
 
-  init() async{
+  init() async {
     //After we re run app
     storage = await SharedPreferences.getInstance();
-    _isDark = storage.getBool("isDark")??false;
+    _isDark = storage.getBool("isDark") ?? false;
     notifyListeners();
   }
-
 }
