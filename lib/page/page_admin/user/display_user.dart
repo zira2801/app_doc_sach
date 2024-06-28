@@ -85,7 +85,7 @@ class _DisplayUsersState extends State<DisplayUser> {
           )
         ],
       ),
-      drawer: const Drawer(), // Assuming you have a SideWidgetMenu
+      drawer: const SideWidgetMenu(),
       body: FutureBuilder<List<Users>>(
         future: fetchUsers(),
         builder: (context, snapshot) {
