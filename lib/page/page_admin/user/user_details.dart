@@ -1,5 +1,8 @@
+import 'package:app_doc_sach/const.dart';
+import 'package:app_doc_sach/page/page_admin/user/edit_user.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/model/user_model.dart';
@@ -17,7 +20,7 @@ class UserDetails extends StatefulWidget {
 class _UserDetailsState extends State<UserDetails> {
   void deleteUsers() async {
     await http.delete(
-      Uri.parse("http://192.168.1.5:1337/api/profiles/${widget.users.id}"),
+      Uri.parse("$baseUrl/api/profiles/${widget.users.id}"),
     );
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
@@ -95,12 +98,12 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
                     const SizedBox(height: 10),
                     CachedNetworkImage(
-                      imageUrl: widget.users.avatar ?? '',
+                      imageUrl: '$baseUrl${widget.users.avatar}'  ?? '',
                       height: 200,
                       width: 200,
                       fit: BoxFit.cover,
                       placeholder: (context, url) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       },
                       errorWidget: (context, url, error) {
                         print('Error loading image: $error');
@@ -155,6 +158,10 @@ class _UserDetailsState extends State<UserDetails> {
                           ),
                           onPressed: () {
                             // Edit functionality can be added here
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => EditUser(users: widget.users)),
+                            );
                           },
                           child: const Text('Edit'),
                         ),

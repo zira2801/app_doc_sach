@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../../const.dart';
+
 class DisplayUser extends StatefulWidget {
   const DisplayUser({Key? key}) : super(key: key);
 
@@ -14,41 +16,55 @@ class DisplayUser extends StatefulWidget {
   _DisplayUsersState createState() => _DisplayUsersState();
 }
 
+  
+
 class _DisplayUsersState extends State<DisplayUser> {
   List<Users> users = [];
 
-  Future<List<Users>> getAll() async {
-    try {
-      var response = await http.get(Uri.parse("http://192.168.1.5:1337/api/profiles/"));
-      if (response.statusCode == 200) {
-        users.clear();
-        final decodedData = jsonDecode(response.body);
-        for (var u in decodedData["data"]) {
-          try {
-            var attributes = u['attributes'];
-            Users user = Users(
-              id: u['id'],
-              fullName: attributes["fullName"]?.toString() ?? 'N/A',
-              email: attributes["email"]?.toString() ?? 'N/A',
-              phone: attributes["phone"]?.toString() ?? 'N/A',
-              gender: attributes["gender"]?.toString() ?? 'N/A',
-              address: attributes["address"]?.toString() ?? 'N/A',
-              age: attributes["age"] != null ? DateTime.parse(attributes["age"]) : null,
-              avatar: attributes["image"],
-            );
-            users.add(user);
-          } catch (e) {
-            print('Error parsing user data: $e\nData: $u');
-          }
-        }
-      } else {
-        print('Failed to load users, status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching users: $e');
-    }
+  // Future<List<Users>> getAll() async {
+  //   try {
+  //     var response = await http.get(Uri.parse("http://10.21.1.33:1337/api/profiles/"));
+  //     if (response.statusCode == 200) {
+  //       users.clear();
+  //       final decodedData = jsonDecode(response.body);
+  //       for (var u in decodedData["data"]) {
+  //         try {
+  //           var attributes = u['attributes'];
+  //           Users user = Users(
+  //             id: u['id'] is int ? u['id'] : int.tryParse(u['id'].toString()) ?? 0,
+  //             fullName: attributes["fullName"]?.toString() ?? 'N/A',
+  //             email: attributes["email"]?.toString() ?? 'N/A',
+  //             phone: attributes["phone"]?.toString() ?? 'N/A',
+  //             gender: attributes["gender"]?.toString() ?? 'N/A',
+  //             address: attributes["address"]?.toString() ?? 'N/A',
+  //             age: attributes["age"] != null ? DateTime.tryParse(attributes["age"].toString()) : null,
+  //             avatar: attributes["image"]?.toString(),
+  //           );
+  //           users.add(user);
+  //         } catch (e) {
+  //           print('Error parsing user data: $e\nData: $u');
+  //         }
+  //       }
+  //     } else {
+  //       print('Failed to load users, status code: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching users: $e');
+  //   }
+  //   return users;
+  // }
+
+  Future<List<Users>> fetchUsers() async {
+  final response = await http.get(Uri.parse('$baseUrl/api/profiles/'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> body = json.decode(response.body);
+    users = body.map((dynamic item) => Users.fromJson(item)).toList();
     return users;
+  } else {
+    throw Exception('Failed to load users');
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -56,27 +72,22 @@ class _DisplayUsersState extends State<DisplayUser> {
       appBar: AppBar(
         title: const Text('User'),
         elevation: 0.0,
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.blue,
         actions: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: secondaryColor,
-                backgroundColor: primaryColor,
-              ),
               onPressed: () {
-                Navigator.push(context,
-                     MaterialPageRoute(builder: (_) => CreateUser()));
+                Navigator.push(context, MaterialPageRoute(builder: (_) => CreateUser()));
               },
               child: const Text('Create'),
             ),
           )
         ],
       ),
-      drawer: const SideWidgetMenu(),
+      drawer: const Drawer(), // Assuming you have a SideWidgetMenu
       body: FutureBuilder<List<Users>>(
-        future: getAll(),
+        future: fetchUsers(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

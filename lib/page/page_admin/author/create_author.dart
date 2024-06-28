@@ -28,7 +28,7 @@ class _CreateAuthorState extends State<CreateAuthor> {
   void initState() {
     super.initState();
     authorNameController = TextEditingController(text: author.authorName);
-    birthDateController = TextEditingController(text: DateFormat('dd-MM-yyyy').format(author.birthDate));
+    birthDateController = TextEditingController(text: DateFormat('dd-MM-yyyy').format(author.birthDate!));
     bornController = TextEditingController(text: author.born);
     teleController = TextEditingController(text: author.telphone);
     nationalityController = TextEditingController(text: author.nationality);
@@ -39,7 +39,7 @@ class _CreateAuthorState extends State<CreateAuthor> {
       Map data = {
         'data': {
           "authorName": author.authorName,
-          "birthDate": DateFormat('dd-MM-yyyy').format(author.birthDate),
+          "birthDate": DateFormat('yyyy-MM-dd').format(author.birthDate!),
           "born": author.born,
           "telephone": author.telphone,
           "nationality": author.nationality,

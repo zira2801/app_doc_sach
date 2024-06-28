@@ -2,8 +2,8 @@ import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/page/page_admin/main_screen.dart';
 import 'package:flutter/material.dart';
 
-class BookAdminWidget extends StatelessWidget{
-    const BookAdminWidget({super.key});
+class BookAdmin extends StatelessWidget{
+    const BookAdmin({super.key});
 
 
   @override
