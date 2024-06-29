@@ -258,10 +258,6 @@ class _BookCreateState extends State<BookCreate> {
       }
     }
   }
-
-
-
-
 /*
   //Tạo một hàm để hiển thị bottom sheet chứa danh sách chapte
   void _showChaptersBottomSheet() {
@@ -403,6 +399,7 @@ class _BookCreateState extends State<BookCreate> {
       appBar: AppBar(
         title: const Text('Thêm sách mới'),
         elevation: 0.0,
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.keyboard_backspace_outlined),
           onPressed: () {
@@ -514,7 +511,7 @@ class _BookCreateState extends State<BookCreate> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 20,),
                 Container(
                   height: 80,
                   padding: const EdgeInsets.only(top: 10),
@@ -608,7 +605,7 @@ class _BookCreateState extends State<BookCreate> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 20,),
                 // Nút để mở dialog chọn tác giả
                 ElevatedButton(
                   onPressed: _showAuthorDialog,
@@ -644,7 +641,7 @@ class _BookCreateState extends State<BookCreate> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 20,),
                 // Nút để mở dialog chọn thể loại
                 ElevatedButton(
                   onPressed: _showCategoryDialog,
@@ -708,12 +705,12 @@ class _BookCreateState extends State<BookCreate> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 30,),
+                    const SizedBox(width: 90,),
                     ElevatedButton(
                       onPressed: () {
                         _pickImage(); // Call function to pick an image
                       },
-                      child: const Text('Chọn ảnh bìa',style: TextStyle(fontSize: 12),),
+                      child: const Text('Chọn ảnh bìa'),
                     ),
                   ],
                 ),
@@ -724,7 +721,7 @@ class _BookCreateState extends State<BookCreate> {
                   onPressed: _showChaptersBottomSheet,
                   child: Text('Danh sách Chapter'),
                 ),*/
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -761,8 +758,9 @@ class _BookCreateState extends State<BookCreate> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
+                                        const SizedBox(height: 20,),
                                         Image.asset('assets/icon/error.png',width: 50,),
-                                        const SizedBox(height: 24,),
+                                        const SizedBox(height: 20,),
                                         Text('Thông tin bạn nhập chưa đầy đủ',
                                             style: GoogleFonts.montserrat(fontSize: 11, color: const Color(0xffEC5B5B), fontWeight: FontWeight.bold)),
                                         const SizedBox(height: 5,),
@@ -824,12 +822,12 @@ class _BookCreateState extends State<BookCreate> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.add_circle_outline_sharp,color: Colors.white,), // Biểu tượng
-                          SizedBox(width: 10), // Khoảng cách giữa icon và văn bản
+                          SizedBox(width: 5), // Khoảng cách giữa icon và văn bản
                           Text('Thêm'), // Văn bản
                         ],
                       ),
                     ),
-                    const SizedBox(width: 50,),
+                    const SizedBox(width: 85,),
                     ElevatedButton(
                       onPressed: () {
                         _refreshForm(); // Gọi hàm để làm mới form
@@ -845,7 +843,7 @@ class _BookCreateState extends State<BookCreate> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.refresh,color: Colors.white,), // Biểu tượng
-                          SizedBox(width: 10), // Khoảng cách giữa icon và văn bản
+                          SizedBox(width: 5), // Khoảng cách giữa icon và văn bản
                           Text('Làm mới'), // Văn bản
                         ],
                       ),

@@ -3,6 +3,7 @@ import 'package:app_doc_sach/controller/auth_controller.dart';
 import 'package:app_doc_sach/model/file_upload.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
@@ -14,6 +15,8 @@ import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/page/page_admin/user/display_user.dart';
 import 'package:app_doc_sach/page/page_admin/category/textfield.dart';
 import 'package:flutter/foundation.dart';
+
+import '../../../color/mycolor.dart';
 
 class CreateUser extends StatefulWidget {
   final int? id;
@@ -149,7 +152,7 @@ class _CreateUserState extends State<CreateUser> {
       };
       var body = json.encode(data);
       var response = await http.post(
-        Uri.parse("http://10.21.1.33:1337/api/profiles/"),
+        Uri.parse("$baseUrl:1337/api/profiles/"),
         headers: <String, String>{
           'content-type': 'application/json; charset=UTF-8',
         },
@@ -170,166 +173,508 @@ class _CreateUserState extends State<CreateUser> {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backgroundColor,
         elevation: 0.0,
-        title: const Text('Create User'),
+        centerTitle: true,
+        title: const Text('Thêm người dùng'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 18),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            height: 850,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Textfield(
-                    controller: fullNameController,
-                    onChanged: (val) {
-                      setState(() {
-                        users.fullName = val;
-                      });
-                    },
-                    hintText: 'Full Name',
-                    icon: const Icon(Icons.person),
-                    hintStyle: const TextStyle(color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  child: Textfield(
-                    controller: emailController,
-                    onChanged: (val) {
-                      setState(() {
-                        users.email = val;
-                      });
-                    },
-                    hintText: 'Email',
-                    icon: const Icon(Icons.email),
-                    hintStyle: const TextStyle(color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  child: Textfield(
-                    controller: ageController,
-                    onChanged: (val) {
-                      setState(() {
-                        users.age = DateTime.tryParse(val);
-                      });
-                    },
-                    hintText: 'Age (YYYY-MM-DD)',
-                    icon: const Icon(Icons.cake),
-                    hintStyle: const TextStyle(color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                if (_imageFile != null)
-                  Image.file(
-                    _imageFile!,
-                    height: 200,
-                    width: 200,
-                  )
-                else if (_webImagePath != null)
-                  Image.network(
-                    _webImagePath!,
-                    height: 200,
-                    width: 200,
-                  )
-                else
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Container(
+              // padding: const EdgeInsets.all(20),
+              // height: 850,
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(10),
+              //   color: Colors.white,
+              //   boxShadow: [
+              //     BoxShadow(
+              //       color: Colors.grey.withOpacity(0.3),
+              //       spreadRadius: 2,
+              //       blurRadius: 5,
+              //       offset: const Offset(0, 3),
+              //     ),
+              //   ],
+              // ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Container(
+                  //   width: double.infinity,
+                  //   color: Colors.white,
+                  //   child: Textfield(
+                  //     controller: fullNameController,
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         users.fullName = val;
+                  //       });
+                  //     },
+                  //     hintText: 'Full Name',
+                  //     icon: const Icon(Icons.person),
+                  //     hintStyle: const TextStyle(color: Colors.black54),
+                  //   ),
+                  // ),
                   Container(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: _pickImage,
-                      icon: const Icon(Icons.image),
-                      label: const Text('Select Image'),
-                    ),
-                  ),
-                const SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  child: Textfield(
-                    controller: phoneController,
-                    onChanged: (val) {
-                      setState(() {
-                        users.phone = val;
-                      });
-                    },
-                    hintText: 'Phone',
-                    icon: const Icon(Icons.phone),
-                    hintStyle: const TextStyle(color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  child: Textfield(
-                    controller: genderController,
-                    onChanged: (val) {
-                      setState(() {
-                        users.gender = val;
-                      });
-                    },
-                    hintText: 'Gender',
-                    icon: const Icon(Icons.wc),
-                    hintStyle: const TextStyle(color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  child: Textfield(
-                    controller: addressController,
-                    onChanged: (val) {
-                      setState(() {
-                        users.address = val;
-                      });
-                    },
-                    hintText: 'Address',
-                    icon: const Icon(Icons.home),
-                    hintStyle: const TextStyle(color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                    height: 80,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        users.fullName = val;
+                      },
+                      controller: fullNameController,
+                      decoration: InputDecoration(
+                        labelText: 'Họ và tên',
+                        hintText: 'Nhập tên đầy đủ',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
                       ),
                     ),
-                    onPressed: save,
-                    child: const Text('Save'),
                   ),
-                ),
-              ],
+                  // const SizedBox(height: 20),
+                  // Container(
+                  //   width: double.infinity,
+                  //   child: Textfield(
+                  //     controller: emailController,
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         users.email = val;
+                  //       });
+                  //     },
+                  //     hintText: 'Email',
+                  //     icon: const Icon(Icons.email),
+                  //     hintStyle: const TextStyle(color: Colors.black54),
+                  //   ),
+                  // ),
+                  Container(
+                    height: 80,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        users.email = val;
+                      },
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        hintText: 'Nhập email người dùng',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // const SizedBox(height: 20),
+                  // Container(
+                  //   width: double.infinity,
+                  //   child: Textfield(
+                  //     controller: ageController,
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         users.age = DateTime.tryParse(val);
+                  //       });
+                  //     },
+                  //     hintText: 'Age (YYYY-MM-DD)',
+                  //     icon: const Icon(Icons.cake),
+                  //     hintStyle: const TextStyle(color: Colors.black54),
+                  //   ),
+                  // ),
+                  Container(
+                    height: 80,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        users.age = DateTime.tryParse(val);
+                      },
+                      controller: ageController,
+                      decoration: InputDecoration(
+                        labelText: 'Ngày sinh',
+                        hintText: 'Nhập ngày sinh (yyyy-mm-dd)',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (_imageFile != null)
+                    Image.file(
+                      _imageFile!,
+                      height: 200,
+                      width: 200,
+                    )
+                  else if (_webImagePath != null)
+                    Image.network(
+                      _webImagePath!,
+                      height: 200,
+                      width: 200,
+                    )
+                  else
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _pickImage,
+                        icon: const Icon(Icons.image),
+                        label: const Text('Chọn ảnh bìa'),
+                      ),
+                    ),
+                  const SizedBox(height: 20),
+                  // Container(
+                  //   width: double.infinity,
+                  //   child: Textfield(
+                  //     controller: phoneController,
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         users.phone = val;
+                  //       });
+                  //     },
+                  //     hintText: 'Phone',
+                  //     icon: const Icon(Icons.phone),
+                  //     hintStyle: const TextStyle(color: Colors.black54),
+                  //   ),
+                  // ),
+                  Container(
+                    height: 80,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        users.phone = val;
+                      },
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                        labelText: 'Điện thoại',
+                        hintText: 'Nhập số điện thoại',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // const SizedBox(height: 20),
+                  // Container(
+                  //   width: double.infinity,
+                  //   child: Textfield(
+                  //     controller: genderController,
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         users.gender = val;
+                  //       });
+                  //     },
+                  //     hintText: 'Gender',
+                  //     icon: const Icon(Icons.wc),
+                  //     hintStyle: const TextStyle(color: Colors.black54),
+                  //   ),
+                  // ),
+                  Container(
+                    height: 80,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        users.gender = val;
+                      },
+                      controller: genderController,
+                      decoration: InputDecoration(
+                        labelText: 'Giới tính',
+                        hintText: 'Nhập giới tính',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // const SizedBox(height: 20),
+                  // Container(
+                  //   width: double.infinity,
+                  //   child: Textfield(
+                  //     controller: addressController,
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         users.address = val;
+                  //       });
+                  //     },
+                  //     hintText: 'Address',
+                  //     icon: const Icon(Icons.home),
+                  //     hintStyle: const TextStyle(color: Colors.black54),
+                  //   ),
+                  // ),
+                  Container(
+                    height: 80,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        users.address = val;
+                      },
+                      controller: addressController,
+                      decoration: InputDecoration(
+                        labelText: 'Địa chỉ',
+                        hintText: 'Nhập địa chỉ',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //       foregroundColor: Colors.white,
+                  //       backgroundColor: Colors.black,
+                  //       padding: const EdgeInsets.symmetric(vertical: 15),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       ),
+                  //     ),
+                  //     onPressed: save,
+                  //     child: const Text('Save'),
+                  //   ),
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(MyColor.primaryColor), // Màu nền
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ
+                          minimumSize: MaterialStateProperty.all(Size(120, 50)), // Kích thước tối thiểu của button
+                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16)), // Đệm bên trong button
+                          textStyle: MaterialStateProperty.all<TextStyle>(
+                            TextStyle(fontSize: 15), // Cỡ chữ
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            if (fullNameController.text.isEmpty ||
+                                emailController.text.isEmpty ||
+                                ageController.text.isEmpty ||
+                                imageController.text.isEmpty ||
+                                phoneController.text.isEmpty ||
+                                genderController.text.isEmpty ||
+                                addressController.text.isEmpty) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xff2A303E),
+                                          borderRadius: BorderRadius.circular(12)
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(height: 20,),
+                                          Image.asset('assets/icon/error.png',width: 50,),
+                                          const SizedBox(height: 20,),
+                                          Text('Thông tin bạn nhập chưa đầy đủ',
+                                              style: GoogleFonts.montserrat(fontSize: 11, color: const Color(0xffEC5B5B), fontWeight: FontWeight.bold)),
+                                          const SizedBox(height: 5,),
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              if (fullNameController.text.isEmpty)
+                                                Text('• Vui lòng nhập tên đầy đủ',
+                                                    style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                              if (emailController.text.isEmpty)
+                                                Text('• Vui lòng nhập email',
+                                                    style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                              if (ageController.text.isEmpty)
+                                                Text('• Vui lòng nhập ngày sinh',
+                                                    style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                              if (imageController.text.isEmpty)
+                                                Text('• Vui lòng thêm ảnh',
+                                                    style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                              if (phoneController.text.isEmpty)
+                                                Text('• Vui lòng nhập số điện thoại',
+                                                    style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                              if (genderController.text.isEmpty)
+                                                Text('• Vui lòng nhập giới tính',
+                                                    style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                              if (addressController.text.isEmpty)
+                                                Text('• Vui lòng nhập địa chỉ',
+                                                    style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                              const SizedBox(height: 20,),
+                                              Center(
+                                                child: OutlinedButton(
+                                                  onPressed: () {Navigator.of(context).pop();},
+                                                  style: OutlinedButton.styleFrom(
+                                                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                                                      foregroundColor: const Color(0xffEC5B5B),
+                                                      side: const BorderSide(color: Color(0xffEC5B5B),)
+                                                  ),
+                                                  child: const Text('Đóng'),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10,),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              save();
+                            }
+                          }
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add_circle_outline_sharp,color: Colors.white,), // Biểu tượng
+                            SizedBox(width: 5), // Khoảng cách giữa icon và văn bản
+                            Text('Thêm'), // Văn bản
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 85,),
+                      ElevatedButton(
+                        onPressed: () {
+                          _refreshForm(); // Gọi hàm để làm mới form
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue, // Màu nền
+                          minimumSize: Size(120, 50), // Kích thước tối thiểu của button
+                          padding: EdgeInsets.all(16), // Đệm bên trong button
+                          textStyle: TextStyle(fontSize: 15), // Cỡ chữ
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.refresh,color: Colors.white,), // Biểu tượng
+                            SizedBox(width: 5), // Khoảng cách giữa icon và văn bản
+                            Text('Làm mới'), // Văn bản
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+  void _refreshForm() {
+    setState(() {
+      fullNameController.clear();
+      emailController.clear();
+      ageController.clear();
+      imageController.clear();
+      phoneController.clear();
+      genderController.clear();
+      addressController.clear();
+    });
   }
 }

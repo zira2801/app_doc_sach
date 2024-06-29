@@ -6,6 +6,8 @@ import 'package:app_doc_sach/page/page_admin/category/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../const.dart';
+
 class EditCategory extends StatefulWidget {
   final CategoryModel? categories;
   const EditCategory({Key? key, this.categories});
@@ -46,7 +48,7 @@ class _EditCategoryState extends State<EditCategory> {
     var body = json.encode(data1);
     final response = await http.put(
         Uri.parse(
-          "http://192.168.1.5:1337/api/categories/${categories.id}",
+          "$baseUrl/api/categories/${categories.id}",
         ),
         headers: <String, String>{
           'content-type': 'application/json;charset=UTF-8',
