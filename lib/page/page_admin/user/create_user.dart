@@ -170,6 +170,20 @@ class _CreateUserState extends State<CreateUser> {
       print(e);
     }
   }
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: users.age,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != users.age) {
+      setState(() {
+        users.age = picked; // Cập nhật ngày sinh vào đối tượng author
+        ageController.text = DateFormat('dd-MM-yyyy').format(picked);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,6 +194,12 @@ class _CreateUserState extends State<CreateUser> {
         elevation: 0.0,
         centerTitle: true,
         title: const Text('Thêm người dùng'),
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -320,33 +340,38 @@ class _CreateUserState extends State<CreateUser> {
                   Container(
                     height: 80,
                     padding: const EdgeInsets.only(top: 10),
-                    child: TextFormField(
-                      onChanged: (val) {
-                        users.age = DateTime.tryParse(val);
-                      },
-                      controller: ageController,
-                      decoration: InputDecoration(
-                        labelText: 'Ngày sinh',
-                        hintText: 'Nhập ngày sinh (yyyy-mm-dd)',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                    child: GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          controller: ageController,
+                          onChanged: (String val) {
+                            users.age = DateFormat('dd-MM-yyyy').parse(val);
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Ngày sinh',
+                            suffixIcon: const Icon(Icons.date_range),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -552,7 +577,7 @@ class _CreateUserState extends State<CreateUser> {
                           if (_formKey.currentState!.validate()) {
                             if (fullNameController.text.isEmpty ||
                                 emailController.text.isEmpty ||
-                                ageController.text.isEmpty ||
+                                DateFormat('dd-MM-yyyy').parse(ageController.text).year > 2006 ||
                                 imageController.text.isEmpty ||
                                 phoneController.text.isEmpty ||
                                 genderController.text.isEmpty ||
@@ -585,7 +610,7 @@ class _CreateUserState extends State<CreateUser> {
                                               if (emailController.text.isEmpty)
                                                 Text('• Vui lòng nhập email',
                                                     style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
-                                              if (ageController.text.isEmpty)
+                                              if (DateFormat('dd-MM-yyyy').parse(ageController.text).year > 2006)
                                                 Text('• Vui lòng nhập ngày sinh',
                                                     style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
                                               if (imageController.text.isEmpty)

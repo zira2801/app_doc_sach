@@ -93,6 +93,12 @@ class _CreateAuthorState extends State<CreateAuthor> {
         elevation: 0.0,
         centerTitle: true,
         title: const Text('Thêm tác giả mới'),
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

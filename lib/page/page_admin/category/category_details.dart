@@ -35,9 +35,16 @@ class _MyDetailsState extends State<MyDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Details'),
+        title: const Text('Chi tiết thể loại'),
         elevation: 0.0,//giá trị 0.0 nghĩa là không có bóng đổ.
+        centerTitle: true,
         backgroundColor: backgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
