@@ -1,3 +1,4 @@
+import 'package:app_doc_sach/const.dart';
 import 'package:app_doc_sach/page/page_admin/user/edit_user.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,7 +20,7 @@ class UserDetails extends StatefulWidget {
 class _UserDetailsState extends State<UserDetails> {
   void deleteUsers() async {
     await http.delete(
-      Uri.parse("http://10.21.1.33:1337/api/profiles/${widget.users.id}"),
+      Uri.parse("$baseUrl/api/profiles/${widget.users.id}"),
     );
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
@@ -34,9 +35,16 @@ class _UserDetailsState extends State<UserDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Details'),
+        title: const Text('Chi tiết người dùng'),
         elevation: 0.0,
+        centerTitle: true,
         backgroundColor: backgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -98,12 +106,12 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
                     const SizedBox(height: 10),
                     CachedNetworkImage(
-                      imageUrl: 'http://10.21.1.33:1337${widget.users.avatar}'  ?? '',
+                      imageUrl: '$baseUrl${widget.users.avatar}'  ?? '',
                       height: 200,
                       width: 200,
                       fit: BoxFit.cover,
                       placeholder: (context, url) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       },
                       errorWidget: (context, url, error) {
                         print('Error loading image: $error');

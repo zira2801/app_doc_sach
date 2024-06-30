@@ -5,6 +5,8 @@ import 'package:app_doc_sach/page/page_admin/category/edit_category.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../const.dart';
+
 class MyDetails extends StatefulWidget {
   final CategoryModel categories;
   const MyDetails({required this.categories});
@@ -22,7 +24,7 @@ class _MyDetailsState extends State<MyDetails> {
       // với <id> là giá trị của widget.categories.id. 
       //await đảm bảo rằng hàm sẽ chờ cho đến khi yêu cầu DELETE được thực hiện xong.
       await http.delete(
-        Uri.parse("http://192.168.1.5:1337/api/categories/${widget.categories.id}"),
+        Uri.parse("$baseUrl/api/categories/${widget.categories.id}"),
       );
       //Điều hướng đến màn hình DisplayCategory và xóa tất cả các màn hình khác trong stack điều hướng.
       Navigator.of(context).pushAndRemoveUntil(
@@ -33,9 +35,16 @@ class _MyDetailsState extends State<MyDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Details'),
+        title: const Text('Chi tiết thể loại'),
         elevation: 0.0,//giá trị 0.0 nghĩa là không có bóng đổ.
+        centerTitle: true,
         backgroundColor: backgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

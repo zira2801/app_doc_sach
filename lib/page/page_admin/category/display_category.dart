@@ -1,5 +1,6 @@
 import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/model/category_model.dart';
+import 'package:app_doc_sach/page/page_admin/book/slideleftroutes.dart';
 import 'package:app_doc_sach/page/page_admin/category/category_details.dart';
 import 'package:app_doc_sach/page/page_admin/category/create_category.dart';
 import 'package:app_doc_sach/widgets/side_widget_menu.dart';
@@ -42,23 +43,17 @@ class _DisplayCategorysState extends State<DisplayCategory> {
     // getAll();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Category'),
+        title: const Text('Quản lý thể loại'),
         elevation: 0.0, // Controls the shadow below the app bar
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.blue,
         actions: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: secondaryColor,
-                backgroundColor:
-                    primaryColor, // Using the custom secondaryColor
-              ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => CreateCategory()));
+                Navigator.of(context).push(SlideLeftRoute(page: const CreateCategory()));
               },
-              child: const Text('Create'),
+              child: const Text('Tạo mới'),
             ),
           )
         ],

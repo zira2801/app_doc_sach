@@ -13,7 +13,7 @@ class DashboardAdminWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dashborad Admin',
+      title: 'Dashboard Admin',
       debugShowCheckedModeBanner: false,
       // ThemeData là một lớp cung cấp thông tin về màu sắc, kiểu chữ và các yếu tố giao diện khác
       theme: ThemeData(

@@ -114,5 +114,48 @@ class BookController extends GetxController{
       return false;
     }
   }
+
+  Future<bool> updateBook(Book book, dynamic newImageData) async {
+    try {
+      // Tải lên ảnh mới nếu có
+      FileUpload? newCoverImage;
+      if (newImageData != null) {
+        newCoverImage = await uploadImage(newImageData);
+        if (newCoverImage == null) {
+          print('Không thể tải lên ảnh mới');
+          return false;
+        }
+        book.coverImage = newCoverImage;
+      }
+
+      // Chuẩn bị dữ liệu để gửi
+      var bookData = book.toJson();
+
+      // Thêm id vào URL để xác định sách cần cập nhật
+      var uri = Uri.parse('$baseUrl/api/books/${book.id}');
+
+      // Gửi yêu cầu PUT
+      var response = await http.put(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          // Thêm headers xác thực nếu cần
+        },
+        body: json.encode(bookData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Cập nhật sách thành công');
+        return true;
+      } else {
+        print('Lỗi khi cập nhật sách. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Lỗi khi cập nhật sách: $e');
+      return false;
+    }
+  }
 }
 

@@ -14,7 +14,7 @@ class MainScreen extends StatelessWidget {
      return Scaffold(
       drawer: !isDesktop
           ? const SizedBox(
-              width: 250,
+              width: 300,
               child: SideWidgetMenu(),
             )
           : null,

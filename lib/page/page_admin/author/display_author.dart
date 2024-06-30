@@ -3,6 +3,7 @@ import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/model/author_model.dart';
 import 'package:app_doc_sach/page/page_admin/author/author_details.dart';
 import 'package:app_doc_sach/page/page_admin/author/create_author.dart';
+import 'package:app_doc_sach/page/page_admin/book/slideleftroutes.dart';
 import 'package:app_doc_sach/widgets/side_widget_menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -89,23 +90,17 @@ class _DisplayAuthorState extends State<DisplayAuthor> {
     // getAll();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Author'),
+        title: const Text('Quản lý tác giả'),
         elevation: 0.0, // Controls the shadow below the app bar
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.blue,
         actions: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: secondaryColor,
-                backgroundColor:
-                    primaryColor, // Using the custom secondaryColor
-              ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => CreateAuthor()));
+                Navigator.of(context).push(SlideLeftRoute(page: const CreateAuthor()));
               },
-              child: const Text('Create'),
+              child: const Text('Tạo mới'),
             ),
           )
         ],

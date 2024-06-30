@@ -1,5 +1,6 @@
 import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/model/user_model.dart';
+import 'package:app_doc_sach/page/page_admin/book/slideleftroutes.dart';
 import 'package:app_doc_sach/page/page_admin/user/create_user.dart';
 import 'package:app_doc_sach/page/page_admin/user/user_details.dart';
 import 'package:app_doc_sach/widgets/side_widget_menu.dart';
@@ -55,7 +56,7 @@ class _DisplayUsersState extends State<DisplayUser> {
   // }
 
   Future<List<Users>> fetchUsers() async {
-  final response = await http.get(Uri.parse('http://10.21.1.33:1337/api/profiles/'));
+  final response = await http.get(Uri.parse('$baseUrl/api/profiles/'));
 
   if (response.statusCode == 200) {
     List<dynamic> body = json.decode(response.body);
@@ -70,7 +71,7 @@ class _DisplayUsersState extends State<DisplayUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User'),
+        title: const Text('Quản lý người dùng'),
         elevation: 0.0,
         backgroundColor: Colors.blue,
         actions: [
@@ -78,14 +79,14 @@ class _DisplayUsersState extends State<DisplayUser> {
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => CreateUser()));
+                Navigator.of(context).push(SlideLeftRoute(page: const CreateUser()));
               },
-              child: const Text('Create'),
+              child: const Text('Tạo mới'),
             ),
           )
         ],
       ),
-      drawer: const Drawer(), // Assuming you have a SideWidgetMenu
+      drawer: const SideWidgetMenu(),
       body: FutureBuilder<List<Users>>(
         future: fetchUsers(),
         builder: (context, snapshot) {
