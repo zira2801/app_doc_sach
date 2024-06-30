@@ -31,6 +31,15 @@ class _StateBookDetail extends State<BookDetailAdmin> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.book.title ?? 'Chi tiết sách'),
+        elevation: 0.0,
+        centerTitle: true,
+        backgroundColor: backgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

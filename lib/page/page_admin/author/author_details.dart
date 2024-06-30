@@ -38,9 +38,16 @@ class _AuthorDetailState extends State<AuthorDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Details'),
+        title: const Text('Chi tiết tác giả'),
         elevation: 0.0,//giá trị 0.0 nghĩa là không có bóng đổ.
         backgroundColor: backgroundColor,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

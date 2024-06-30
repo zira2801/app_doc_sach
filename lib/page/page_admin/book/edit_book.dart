@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:app_doc_sach/const.dart';
+import 'package:app_doc_sach/const/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,7 +76,7 @@ class _EditBookPageState extends State<EditBookPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Chọn tác giả'),
+          title: const Text('Chọn tác giả'),
           content: SingleChildScrollView(
             child: ListBody(
               children: _authors.map((author) {
@@ -108,7 +109,7 @@ class _EditBookPageState extends State<EditBookPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Chọn thể loại'),
+          title: const Text('Chọn thể loại'),
           content: SingleChildScrollView(
             child: ListBody(
               children: _categories.map((category) {
@@ -165,12 +166,12 @@ class _EditBookPageState extends State<EditBookPage> {
       bool success = await BookController.instance.updateBook(updatedBook, newImageData);
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sách đã được cập nhật thành công')),
+          const SnackBar(content: Text('Sách đã được cập nhật thành công')),
         );
         Navigator.pop(context); // Quay lại màn hình trước
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Không thể cập nhật sách. Vui lòng thử lại')),
+          const SnackBar(content: Text('Không thể cập nhật sách. Vui lòng thử lại')),
         );
       }
     }
@@ -179,8 +180,16 @@ class _EditBookPageState extends State<EditBookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chỉnh sửa sách'),
+        title: const Text('Sửa thông tin sách'),
         elevation: 0.0,
+        centerTitle: true,
+        backgroundColor: backgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -192,46 +201,46 @@ class _EditBookPageState extends State<EditBookPage> {
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Tiêu đề sách',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: _isbnController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'ISBN',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: _descriptionController,
                   maxLines: 5,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Mô tả',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: _pagesController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Số trang',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: _languageController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Ngôn ngữ',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   height: 80,
                   width: double.infinity,
@@ -242,7 +251,7 @@ class _EditBookPageState extends State<EditBookPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Wrap(
                         spacing: 8.0,
                         runSpacing: 4.0,
@@ -260,12 +269,12 @@ class _EditBookPageState extends State<EditBookPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: _showAuthorDialog,
-                  child: Text('Chọn tác giả'),
+                  child: const Text('Chọn tác giả'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   height: 80,
                   width: double.infinity,
@@ -276,7 +285,7 @@ class _EditBookPageState extends State<EditBookPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Wrap(
                         spacing: 8.0,
                         runSpacing: 4.0,
@@ -294,12 +303,12 @@ class _EditBookPageState extends State<EditBookPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: _showCategoryDialog,
-                  child: Text('Chọn thể loại'),
+                  child: const Text('Chọn thể loại'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -317,26 +326,26 @@ class _EditBookPageState extends State<EditBookPage> {
                         baseUrl+_imagePath!,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          return Center(child: Text('Error loading image'));
+                          return const Center(child: Text('Error loading image'));
                         },
                       )
-                          : Center(child: Text('No image selected'))),
+                          : const Center(child: Text('No image selected'))),
                     ),
-                    SizedBox(width: 30),
+                    const SizedBox(width: 30),
                     ElevatedButton(
                       onPressed: _pickImage,
-                      child: Text('Chọn ảnh bìa'),
+                      child: const Text('Chọn ảnh bìa'),
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyColor.primaryColor,
-                    minimumSize: Size(double.infinity, 50),
+                    minimumSize: const Size(double.infinity, 50),
                   ),
                   onPressed: _updateBook,
-                  child: Text('Cập nhật sách'),
+                  child: const Text('Cập nhật sách'),
                 ),
               ],
             ),

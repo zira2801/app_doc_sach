@@ -34,9 +34,16 @@ class _UserDetailsState extends State<UserDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Details'),
+        title: const Text('Chi tiết người dùng'),
         elevation: 0.0,
+        centerTitle: true,
         backgroundColor: backgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

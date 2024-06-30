@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:app_doc_sach/color/mycolor.dart';
+import 'package:app_doc_sach/const/constant.dart';
 import 'package:app_doc_sach/controller/category_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -400,6 +401,7 @@ class _BookCreateState extends State<BookCreate> {
         title: const Text('Thêm sách mới'),
         elevation: 0.0,
         centerTitle: true,
+        backgroundColor: backgroundColor,
         leading: IconButton(
           icon: const Icon(Icons.keyboard_backspace_outlined),
           onPressed: () {
