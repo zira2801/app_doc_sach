@@ -339,13 +339,120 @@ class _EditBookPageState extends State<EditBookPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColor.primaryColor,
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  onPressed: _updateBook,
-                  child: const Text('Cập nhật sách'),
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: MyColor.primaryColor,
+                //     minimumSize: const Size(double.infinity, 50),
+                //   ),
+                //   onPressed: _updateBook,
+                //   child: const Text('Cập nhật sách'),
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(MyColor.primaryColor), // Màu nền
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ
+                        minimumSize: MaterialStateProperty.all(Size(120, 50)), // Kích thước tối thiểu của button
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16)), // Đệm bên trong button
+                        textStyle: MaterialStateProperty.all<TextStyle>(
+                          TextStyle(fontSize: 15), // Cỡ chữ
+                        ),
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          if (_selectedAuthors.isEmpty ||
+                              _selectedCategories.isEmpty ||
+                              _imagePath == null ||
+                              _titleController.text.isEmpty ||
+                              _isbnController.text.isEmpty ||
+                              _descriptionController.text.isEmpty ||
+                              _pagesController.text.isEmpty ||
+                              _languageController.text.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xff2A303E),
+                                        borderRadius: BorderRadius.circular(12)
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const SizedBox(height: 20,),
+                                        Image.asset('assets/icon/error.png',width: 50,),
+                                        const SizedBox(height: 20,),
+                                        Text('Thông tin bạn nhập chưa đầy đủ',
+                                            style: GoogleFonts.montserrat(fontSize: 11, color: const Color(0xffEC5B5B), fontWeight: FontWeight.bold)),
+                                        const SizedBox(height: 5,),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            if (_selectedAuthors.isEmpty)
+                                              Text('• Vui lòng chọn ít nhất một tác giả',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_selectedCategories.isEmpty)
+                                              Text('• Vui lòng chọn ít nhất một thể loại',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_imagePath == null)
+                                              Text('• Vui lòng chọn ảnh bìa sách',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_titleController.text.isEmpty)
+                                              Text('• Vui lòng nhập tiêu đề sách',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_isbnController.text.isEmpty)
+                                              Text('• Vui lòng nhập ISBN',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_descriptionController.text.isEmpty)
+                                              Text('• Vui lòng nhập mô tả sách',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_pagesController.text.isEmpty)
+                                              Text('• Vui lòng nhập số trang',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            if (_languageController.text.isEmpty)
+                                              Text('• Vui lòng nhập ngôn ngữ',
+                                                  style: GoogleFonts.montserrat(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w300)),
+                                            const SizedBox(height: 20,),
+                                            Center(
+                                              child: OutlinedButton(
+                                                onPressed: () {Navigator.of(context).pop();},
+                                                style: OutlinedButton.styleFrom(
+                                                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                                                    foregroundColor: const Color(0xffEC5B5B),
+                                                    side: const BorderSide(color: Color(0xffEC5B5B),)
+                                                ),
+                                                child: const Text('Đóng'),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10,),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            _updateBook();
+                          }
+                        }
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add_circle_outline_sharp,color: Colors.white,), // Biểu tượng
+                          SizedBox(width: 5), // Khoảng cách giữa icon và văn bản
+                          Text('Lưu thông tin'), // Văn bản
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
