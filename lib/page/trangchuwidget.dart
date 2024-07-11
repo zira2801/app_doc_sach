@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 
 import '../provider/ui_provider.dart';
 
-
 class TrangChuWidget extends StatefulWidget {
   const TrangChuWidget({super.key});
 
@@ -20,8 +19,8 @@ class TrangChuWidget extends StatefulWidget {
   State<TrangChuWidget> createState() => _TrangChuWidgetState();
 }
 
-class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin{
-
+class _TrangChuWidgetState extends State<TrangChuWidget>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   int selectedTab = 0;
   late TabController _tabController;
 
@@ -54,7 +53,7 @@ class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProvid
           'Mới nhất',
         ),
       ),
-       Tab(
+      Tab(
         child: Text(
           'Danh mục',
         ),
@@ -64,7 +63,9 @@ class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProvid
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this,initialIndex: _tabState.selectedTab);
+    _tabController = TabController(
+        length: 4, vsync: this, initialIndex: _tabState.selectedTab);
+    setStatusBarColor();
     super.initState();
   }
 
@@ -74,10 +75,29 @@ class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProvid
     _tabController.dispose();
   }
 
-
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  void setStatusBarColor() async {
+    // Lấy UiProvider từ context
+    final uiProvider = Provider.of<UiProvider>(context, listen: false);
+
+    // Áp dụng thay đổi SystemUiOverlayStyle dựa trên giá trị của UiProvider
+    if (uiProvider.isDark) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ));
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: const Color.fromRGBO(232, 245, 233, 1.0),
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,59 +105,57 @@ class _TrangChuWidgetState extends State<TrangChuWidget> with SingleTickerProvid
     return ChangeNotifierProvider.value(
       value: _tabState,
       child: Scaffold(
-        body:SafeArea(
-          child: Consumer <UiProvider>(
-                    builder: (context,UiProvider notifier, child)  {
-                      return Column(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            color: notifier.isDark ? Colors.black12 : Colors.white,
-                            child:TabBar(
-                              controller: _tabController,
-                              tabs: generateTabs(notifier),
-                              labelColor: _selectedColor,
-                              indicatorColor: _selectedColor,
-                              unselectedLabelColor: notifier.isDark ? Colors.white: _unselectedColor,
-                              tabAlignment: TabAlignment.center,
-                              isScrollable: true,
-                              onTap: (index) {
-                                _tabState.setSelectedTab(index);
-                              },
-                            ),
-                          ),
+        body: SafeArea(
+          child: Consumer<UiProvider>(
+              builder: (context, UiProvider notifier, child) {
+            return Column(children: [
+              Container(
+                width: double.infinity,
+                color: notifier.isDark
+                    ? Colors.black12
+                    : const Color.fromRGBO(232, 245, 233, 1.0),
+                child: TabBar(
+                  controller: _tabController,
+                  tabs: generateTabs(notifier),
+                  dividerColor: Colors.transparent,
+                  labelColor: _selectedColor,
+                  indicatorColor: _selectedColor,
+                  unselectedLabelColor:
+                      notifier.isDark ? Colors.white : _unselectedColor,
+                  tabAlignment: TabAlignment.center,
+                  isScrollable: true,
+                  onTap: (index) {
+                    _tabState.setSelectedTab(index);
+                  },
+                ),
+              ),
 
-                          // TabBarView
-                          Expanded(
-                            child: Consumer<TabState>(
-                              builder: (context, tabState, child) {// Update the TabController index
-                                return IndexedStack(
-                                  index: _tabState.selectedTab,
-                                  children: [
-                                    // Nội dung cho mỗi Tab
-                                    _buildTabContent(const KhamPhaWidget()),
-                                    _buildTabContent(const NoiBatWidget()),
-                                    _buildTabContent(const MoiNhatWidget()),
-                                    _buildTabContent(const DanhMucWidget()),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ]
-                      );
-                    }
-                  ),
-            ),
+              // TabBarView
+              Expanded(
+                child: Consumer<TabState>(
+                  builder: (context, tabState, child) {
+                    // Update the TabController index
+                    return IndexedStack(
+                      index: _tabState.selectedTab,
+                      children: [
+                        // Nội dung cho mỗi Tab
+                        _buildTabContent(const KhamPhaWidget()),
+                        _buildTabContent(const NoiBatWidget()),
+                        _buildTabContent(const MoiNhatWidget()),
+                        _buildTabContent(const DanhMucWidget()),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ]);
+          }),
         ),
+      ),
     );
   }
 
   Widget _buildTabContent(Widget widget) {
-    return Center(
-      child: widget
-    );
+    return Center(child: widget);
   }
-
 }

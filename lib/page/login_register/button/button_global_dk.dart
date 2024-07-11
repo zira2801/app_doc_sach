@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import '../service/auth_service.dart';
 
 class ButtonGlobal_DK extends StatefulWidget {
+  //định nghĩa constructor cho widget
+  //key dùng để xác định widget này duy nhất trong widget
   const ButtonGlobal_DK({super.key, required this.text, required this.onPressed});
 
   final String text;
