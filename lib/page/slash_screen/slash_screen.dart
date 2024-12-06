@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/ui_provider.dart';
+import '../page_admin/dashboard_admin.dart';
 
 class SlashScreen extends StatefulWidget {
   const SlashScreen({super.key});
@@ -14,7 +15,8 @@ class SlashScreen extends StatefulWidget {
   State<SlashScreen> createState() => _SlashScreenState();
 }
 
-class _SlashScreenState extends State<SlashScreen> with SingleTickerProviderStateMixin {
+class _SlashScreenState extends State<SlashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool _isShowingOverlay = true;
   @override
@@ -31,8 +33,8 @@ class _SlashScreenState extends State<SlashScreen> with SingleTickerProviderStat
 
   @override
   void dispose() {
-
-    _animationController.dispose();;
+    _animationController.dispose();
+    ;
     super.dispose();
   }
 
@@ -43,7 +45,7 @@ class _SlashScreenState extends State<SlashScreen> with SingleTickerProviderStat
       });
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const DashBoardScreen(),
+          pageBuilder: (_, __, ___) => const /*DashBoardScreen()*/ DashboardAdminWidget(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: animation,
@@ -62,42 +64,43 @@ class _SlashScreenState extends State<SlashScreen> with SingleTickerProviderStat
       );
     } else {
       return SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: Colors.white,
+        statusBarColor: const Color.fromRGBO(232, 245, 233, 1.0),
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark,
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer <UiProvider>(
-        builder: (context,UiProvider notifier, child)  {
-
-          return AnnotatedRegion<SystemUiOverlayStyle>(
-            value: _isShowingOverlay
-                ? SystemUiOverlayStyle.light.copyWith(
-              statusBarColor: Colors.transparent,
-            )
-            : _getStatusBarStyle(notifier), // Sử dụng hàm này để lấy style tương ứng
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [MyColor.primaryColor, MyColor.secondaryColor],
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                ),
+      body:
+          Consumer<UiProvider>(builder: (context, UiProvider notifier, child) {
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: _isShowingOverlay
+              ? SystemUiOverlayStyle.light.copyWith(
+                  statusBarColor: Colors.transparent,
+                )
+              : _getStatusBarStyle(
+                  notifier), // Sử dụng hàm này để lấy style tương ứng
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [MyColor.primaryColor, MyColor.secondaryColor],
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
               ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image(
-                    image: AssetImage('assets/icon/logoapp.png'),
-                    width: 100,
-                    height: 100,
-                  ),
-                  /*SizedBox(
+            ),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                  image: AssetImage('assets/icon/logoapp.png'),
+                  width: 100,
+                  height: 100,
+                ),
+                /*SizedBox(
                     height: 20,
                   ),
                   Text(
@@ -108,13 +111,11 @@ class _SlashScreenState extends State<SlashScreen> with SingleTickerProviderStat
                       fontSize: 25,
                     ),
                   ),*/
-                ],
-              ),
+              ],
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 }
-

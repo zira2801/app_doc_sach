@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
-
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:app_doc_sach/controller/controller.dart';
 import 'package:app_doc_sach/page/login_register/dangnhap.dart';
 import 'package:app_doc_sach/page/login_register/service/auth_service.dart';
 import 'package:app_doc_sach/page/taikhoanwidget.dart';
@@ -7,11 +9,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../color/mycolor.dart';
+import '../../const.dart';
 import '../../provider/ui_provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../view/dashboard/dashboard_screen.dart';
 class ChonDangNhapWidget extends StatefulWidget {
   const ChonDangNhapWidget({super.key});
 
@@ -20,6 +29,9 @@ class ChonDangNhapWidget extends StatefulWidget {
 }
 
 class _ChonDangNhapWidgetState extends State<ChonDangNhapWidget> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+  );
 
   final AuthService _auth = AuthService();
   void  _getStatusBarStyle(UiProvider uiProvider) {
@@ -90,7 +102,7 @@ class _ChonDangNhapWidgetState extends State<ChonDangNhapWidget> {
 
                 ElevatedButton(
                   onPressed: () {
-                    _loginGoogle();
+                    signInWithGoogle;
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent, // Đặt màu nền là trong suốt
@@ -281,14 +293,108 @@ class _ChonDangNhapWidgetState extends State<ChonDangNhapWidget> {
     );
   }
 
-  _loginGoogle() async {
-    try{
-      await _auth.signInWithGoogle();
+  void signInWithGoogle({
+    required BuildContext context,
+  }) async {
+    try {
+      EasyLoading.show(
+        status: 'Loading...',
+        dismissOnTap: false,
+      );
+
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // Người dùng đã hủy đăng nhập
+        EasyLoading.dismiss();
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final String? token = googleAuth.idToken;
+      final String fullName = googleUser.displayName ?? '';
+
+      // Gửi token đến Strapi API để xác thực và lưu trữ người dùng
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/auth/callback/google'),
+        body: {'access_token': token},
+      );
+
+      if (response.statusCode == 200) {
+        String strapiToken = json.decode(response.body)['jwt'];
+
+        // Gọi createProfile để tạo hồ sơ người dùng
+        var userResult = await createProfile(
+          token: strapiToken,
+          fullName: fullName,
+        );
+
+        if (userResult.statusCode == 200) {
+          var user = json.decode(userResult.body);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('jwt', strapiToken);
+          await prefs.setString('user', json.encode(user));
+
+          // Hiển thị thông báo đăng nhập thành công
+          _succesMessageLogin(context);
+
+          // Chờ một khoảng thời gian trước khi điều hướng
+          await Future.delayed(const Duration(milliseconds: 500));
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) => const DashBoardScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0); // Bắt đầu từ ngoài phải
+                const end = Offset.zero; // Kết thúc ở vị trí ban đầu
+                const curve = Curves.ease; // Kiểu animation
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve)); // Tạo tween
+                var offsetAnimation = animation.drive(tween); // Áp dụng tween vào animation
+                return SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                );
+              },
+            ),
+          );
+        } else {
+          _handleError(userResult);
+        }
+      } else {
+        _handleError(response);
+      }
+    } catch (error) {
+      print('Error during Google login: $error');
+    } finally {
+      EasyLoading.dismiss();
     }
-    catch(e) {
-      log("Error occurred: $e");
-      // Ném ra ngoại lệ để bắt lỗi ở nơi gọi
-      throw e;
-    }
+  }
+
+  Future<dynamic> createProfile({
+    required String token,
+    required String fullName,
+  }) async {
+    var body = {
+      "fullName": fullName,
+    };
+    var response = await http.post(
+      Uri.parse('https://your-strapi-api.com/api/profile/me'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(body),
+    );
+    return response;
+  }
+
+  void _succesMessageLogin(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Đăng nhập thành công!')),
+    );
+  }
+
+  void _handleError(http.Response response) {
+    print('Failed to login: ${response.body}');
+    EasyLoading.showError('Đăng nhập thất bại: ${response.body}');
   }
 }

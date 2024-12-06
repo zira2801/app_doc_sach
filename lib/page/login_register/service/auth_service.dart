@@ -6,6 +6,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final DatabaseReference _userRef = FirebaseDatabase.instance.reference().child('TaiKhoan');
+
+
 
   Future<User?> createUserWithEmailAndPassword(String email, String password) async {
     try {
@@ -21,21 +24,27 @@ class AuthService {
     }
   }
 
+  // Future<User?> loginUserWithEmailAndPassword(String email, String password) async {
+  //   try {
+  //     final userCredential = await _auth.signInWithEmailAndPassword(
+  //       email: email,
+  //       password: password,
+  //     );
+  //     return userCredential.user;
+  //   } on FirebaseAuthException catch (e) {
+  //     log("Firebase Auth Exception: ${e.code}");
+  //     // Ném ra ngoại lệ để bắt lỗi ở nơi gọi
+  //     throw FirebaseAuthException(code: e.code, message: e.message);
+  //   } catch (e) {
+  //     log("Error occurred: $e");
+  //     rethrow;
+  //   }
+  // }
+
+
   Future<User?> loginUserWithEmailAndPassword(String email, String password) async {
-    try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      log("Firebase Auth Exception: ${e.code}");
-      // Ném ra ngoại lệ để bắt lỗi ở nơi gọi
-      throw FirebaseAuthException(code: e.code, message: e.message);
-    } catch (e) {
-      log("Error occurred: $e");
-      rethrow;
-    }
+    UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    return result.user;
   }
 
   //Dang nhap bang Google
@@ -101,4 +110,15 @@ class AuthService {
 
   // Lấy trạng thái đăng nhập
   Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  Future<String?> getUserRole(User user) async {
+    DatabaseReference userRef = _userRef.child(user.uid);
+    DataSnapshot snapshot = await userRef.child('role').get();
+    if (snapshot.exists) {
+      return snapshot.value.toString();
+    } else {
+      print("No role found for user: ${user.uid}");
+    }
+    return null;
+  }
 }
